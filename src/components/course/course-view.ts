@@ -69,13 +69,19 @@ export class CourseView {
     this.course = this.courseRepo.course;
     this.navigatorProperties.init(this.course.lo);
     let users = await this.analyticsService.getUsers(this.course);
-    for (let i=0; i<users.length; i++){
-      //console.log(users[i]);
-      console.log(users[i].count);
-      console.log(users[i].name);
-      let usersUsage = await this.analyticsService.getUserUsage(this.course, users[i].email);
-      console.log(usersUsage);
-    }
+    let userData = [];
+    let usersUsage = await this.analyticsService.getUserUsage(this.course, 'edeleastar@wit*ie');
+    console.log(usersUsage);
+    //for (let i=0; i<users.length; i++){
+    //  let usersUsage = await this.analyticsService.getUserUsage(this.course, users[i].email);
+      // let user = {
+      //   name : users[i].name,
+      //   count : users[i].count,
+      //   usage : usersUsage
+      // }
+      userData.push(usersUsage);
+   // }
+    //console.log(userData);
   }
 
   private onReady(params) {
