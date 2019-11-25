@@ -4,24 +4,19 @@ import environment from "../environment";
 import { Course } from "./course";
 
 let level = 0;
-function populate(userData): any {
-  level += 2;
+function populate(id: string, userData): any {
   let lo = {
+    id : "",
     los: []
   };
+  lo.id = id;
   Object.entries(userData).forEach(([key, value]) => {
     if (typeof value === "object") {
-      //lo.los.push(value);
-      let keyValue = " ".repeat(level) + key;
-      console.log(`${keyValue}:`)
-      lo.los.push(populate(value));
+      lo.los.push(populate(key, value));
     } else {
-      let keyValue = " ".repeat(level) + key;
       lo[key] = value;
-      console.log(`${keyValue}:${value}`);
     }
   });
-  level -= 2;
   return lo;
 }
 
@@ -74,21 +69,7 @@ export class AnalyticsService {
       .ref(path)
       .once("value");
     let los = snapshot.val();
-    let lo = populate(los);
-    //let usage = this.snapshotToArray(snapshot);
-    let userData = {
-      los: []
-    };
-    snapshot.forEach(function(childSnapshot) {
-      let type = typeof childSnapshot.val();
-      if (type === "object") {
-        let c = childSnapshot.val();
-        userData.los.push(c);
-      } else {
-        userData[childSnapshot.key] = childSnapshot.val();
-      }
-    });
-
-    return userData;
+    let lo = populate('home', los);
+    return lo;
   }
 }
