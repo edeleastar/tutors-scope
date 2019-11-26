@@ -7,6 +7,17 @@ import { autoinject } from "aurelia-framework";
 
 import "ag-grid-enterprise";
 
+interface Row {
+  student: string;
+  title: string;
+  date: string;
+  count: string;
+  topic?: string;
+  element?: string;
+  chapter?: string;
+  item?: string;
+}
+
 @autoinject
 export class CourseView {
   course: Course;
@@ -15,7 +26,7 @@ export class CourseView {
   rowData = [];
 
   columnDefs = [
-    { headerName: "Student", field: "student", width: 60, rowGroup: true, hide: true},
+    { headerName: "Student", field: "student", width: 60, rowGroup: true, hide: true },
     { headerName: "Topic", field: "topic", width: 60, rowGroup: true, hide: true },
     { headerName: "Element", field: "element", width: 60, rowGroup: true, hide: true },
     { headerName: "Chapter", field: "chapter", width: 60, rowGroup: true, hide: true },
@@ -23,7 +34,7 @@ export class CourseView {
     { headerName: "Tile", field: "title", width: 150 },
     { headerName: "Date", field: "date", width: 100 },
     { headerName: "Count", field: "count", width: 50 }
-];
+  ];
   constructor(
     private courseRepo: CourseRepo,
     private navigatorProperties: NavigatorProperties,
@@ -35,20 +46,36 @@ export class CourseView {
     this.gridOptions.animateRows = true;
   }
 
+  loElements = ["topic", "element", "chapter", "item"];
+
+  generateRow(student: string, lo, ...params) {
+    let row: Row = {
+      student: student,
+      title: lo.title,
+      date: lo.last,
+      count: lo.count
+    };
+    params.forEach((param, index) => {
+      row[this.loElements[index]] = param;
+    });
+    return row;
+  }
+
   populateRows(userData) {
     const student = userData.email;
-    this.rowData.push({ student: student, title: userData.title, date: userData.last, count:userData.count  });
-    userData.los.forEach((value, index) => {
-      let topic = value.id;
-      this.rowData.push({ student: student, topic: topic, title: value.title, date: value.last, count:value.count });
-      value.los.forEach((value, index) => {
-        let element = value.id;
-        this.rowData.push({student: student, topic: topic, element: element, title: value.title, date: value.last, count:value.count });
-        value.los.forEach((value, index) => {
-          let chapter = value.id;
-          this.rowData.push({student: student, topic: topic, element: element, chapter: chapter, title: value.title, date: value.last, count:value.count });
-          value.los.forEach((value, index) => {
-            this.rowData.push({student: student, topic: topic, element: element, chapter: chapter, item: value.id, title: value.title, date: value.last, count:value.count});
+    this.rowData.push(this.generateRow (student, userData));
+    userData.los.forEach(lo => {
+      const topic = lo.id;
+      this.rowData.push(this.generateRow(student, lo, topic));
+      lo.los.forEach(lo => {
+        const element = lo.id;
+        this.rowData.push(this.generateRow(student, lo, topic, element));
+        lo.los.forEach(lo => {
+          const chapter = lo.id;
+          this.rowData.push(this.generateRow(student, lo, topic, element, chapter));
+          lo.los.forEach(lo => {
+            const item = lo.id;
+            this.rowData.push(this.generateRow(student, lo, topic, element, chapter, item));
           });
         });
       });
