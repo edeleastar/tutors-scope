@@ -16,6 +16,21 @@ interface Row {
   element?: string;
   chapter?: string;
   item?: string;
+};
+
+const loElements = ["topic", "element", "chapter", "item"];
+
+function generateRow(student: string, lo, ...params) {
+  let row: Row = {
+    student: student,
+    title: lo.title,
+    date: lo.last,
+    count: lo.count
+  };
+  params.forEach((param, index) => {
+    row[loElements[index]] = param;
+  });
+  return row;
 }
 
 @autoinject
@@ -46,36 +61,17 @@ export class CourseView {
     this.gridOptions.animateRows = true;
   }
 
-  loElements = ["topic", "element", "chapter", "item"];
-
-  generateRow(student: string, lo, ...params) {
-    let row: Row = {
-      student: student,
-      title: lo.title,
-      date: lo.last,
-      count: lo.count
-    };
-    params.forEach((param, index) => {
-      row[this.loElements[index]] = param;
-    });
-    return row;
-  }
-
   populateRows(userData) {
     const student = userData.email;
-    this.rowData.push(this.generateRow (student, userData));
-    userData.los.forEach(lo => {
-      const topic = lo.id;
-      this.rowData.push(this.generateRow(student, lo, topic));
-      lo.los.forEach(lo => {
-        const element = lo.id;
-        this.rowData.push(this.generateRow(student, lo, topic, element));
-        lo.los.forEach(lo => {
-          const chapter = lo.id;
-          this.rowData.push(this.generateRow(student, lo, topic, element, chapter));
-          lo.los.forEach(lo => {
-            const item = lo.id;
-            this.rowData.push(this.generateRow(student, lo, topic, element, chapter, item));
+    this.rowData.push(generateRow (student, userData));
+    userData.los.forEach(topic => {
+      this.rowData.push(generateRow(student, topic, topic.id));
+      topic.los.forEach(element => {
+        this.rowData.push(generateRow(student, element, topic.id, element.id));
+        element.los.forEach(chapter => {
+          this.rowData.push(generateRow(student, chapter, topic.id, element.id, chapter.id));
+          chapter.los.forEach(item => {
+            this.rowData.push(generateRow(student, item, topic.id, element.id, chapter.id, item.id));
           });
         });
       });
