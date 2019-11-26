@@ -40,15 +40,23 @@ export class CourseView {
   ];
 
   columnDefs = [
-    { headerName: "Student", field: "student", width: 60, rowGroup: true, hide: true, suppressSizeToFit: true },
-    { headerName: "Course", field: "course", width: 60, rowGroup: true, hide: true },
+    { headerName: "Student", field: "student", width: 60, rowGroup: true, hide: true},
     { headerName: "Topic", field: "topic", width: 60, rowGroup: true, hide: true },
     { headerName: "Element", field: "element", width: 60, rowGroup: true, hide: true },
-    { headerName: "Title", field: "title", width: 60 },
-    { headerName: "Chapter", field: "chapter", width: 60 },
-    { headerName: "Count", field: "count", width: 60 },
-    { headerName: "Date", field: "date", width: 60 }
-  ];
+    { headerName: "Chapter", field: "chapter", width: 60, rowGroup: true, hide: true },
+    { headerName: "Item", field: "item", width: 60, rowGroup: true, hide: true },
+    { headerName: "Tile", field: "title", width: 150 },
+    { headerName: "Date", field: "date", width: 100 },
+    { headerName: "Count", field: "count", width: 50 }
+
+
+    // { headerName: "Student", field: "student", width: 60, rowGroup: true},
+    // { headerName: "Topic", field: "topic", width: 60, rowGroup: true },
+    // { headerName: "Element", field: "element", width: 60, rowGroup: true},
+    // { headerName: "Chapter", field: "chapter", width: 60, rowGroup: true },
+    // { headerName: "Item", field: "item", width: 60, rowGroup: true,},
+    // { headerName: "Count", field: "count", width: 60 }
+];
   constructor(
     private courseRepo: CourseRepo,
     private navigatorProperties: NavigatorProperties,
@@ -60,24 +68,28 @@ export class CourseView {
     //this.gridOptions.treeData = true, // enable Tree Data mode
     this.gridOptions.animateRows = true;
     //this.gridOptions.groupMultiAutoColumn = true
-    this.gridOptions.groupHideOpenParents = true;
+    //this.gridOptions.groupHideOpenParents = true;
     //this.gridOptions.groupMultiAutoColumn = true;
   }
 
   populateRows(userData) {
     const root = {
-      student: userData.name,
+      student: userData.email,
       course: userData.title
     };
-    this.rowData.push({ student: root.student, course: root.course, count: userData.count });
+    this.rowData.push({ student: root.student, title: userData.title, date: userData.last, count:userData.count  });
     userData.los.forEach((value, index) => {
-      let topic = value.title;
-      this.rowData.push({ student: root.student, course: root.course, topic: value.title, count: value.count });
+      let topic = value.id;
+      this.rowData.push({ student: root.student, topic: topic, title: value.title, date: value.last, count:value.count });
       value.los.forEach((value, index) => {
         let element = value.id;
-        this.rowData.push({student: root.student, course: root.course, topic: topic, element: value.id});
+        this.rowData.push({student: root.student, topic: topic, element: element, title: value.title, date: value.last, count:value.count });
         value.los.forEach((value, index) => {
-          this.rowData.push({student: root.student, course: root.course, topic: topic, element: element, title:value.id, count:value.count});
+          let chapter = value.id;
+          this.rowData.push({student: root.student, topic: topic, element: element, chapter: chapter, title: value.title, date: value.last, count:value.count });
+          value.los.forEach((value, index) => {
+            this.rowData.push({student: root.student, topic: topic, element: element, chapter: chapter, item: value.id, title: value.title, date: value.last, count:value.count});
+          });
         });
       });
     });
