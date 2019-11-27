@@ -12,6 +12,7 @@ export class CourseView {
   course: Course;
   gridOptions: GridOptions;
   userGrid = new UserGrid();
+  grid = null;
 
   constructor(
     private courseRepo: CourseRepo,
@@ -24,9 +25,6 @@ export class CourseView {
     this.gridOptions.defaultColDef = this.userGrid.defaultColDef;
     this.gridOptions.autoGroupColumnDef = this.userGrid.autoGroupColumnDef;
     this.gridOptions.animateRows = true;
-    this.gridOptions.groupRemoveLowestSingleChildren = true;
-    //this.gridOptions.groupRemoveSingleChildren=true;
-   // this.gridOptions.groupHideOpenParents=true;
   }
 
   async activate(params, route) {
@@ -40,7 +38,12 @@ export class CourseView {
     }
   }
 
+  resize (detail) {
+    if (this.grid) this.grid.api.sizeColumnsToFit();
+  }
+
   private onReady(params) {
+    this.grid = params;
     params.api.sizeColumnsToFit();
   }
 }

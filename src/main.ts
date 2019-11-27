@@ -7,6 +7,7 @@ export function configure(aurelia: Aurelia) {
     .standardConfiguration()
     .plugin(PLATFORM.moduleName("aurelia-fontawesome"))
     .plugin(PLATFORM.moduleName('ag-grid-aurelia'))
+    .plugin(PLATFORM.moduleName('aurelia-resize'))
     .feature(PLATFORM.moduleName("resources/index"));
 
   aurelia.use.developmentLogging(environment.debug ? "debug" : "warn");

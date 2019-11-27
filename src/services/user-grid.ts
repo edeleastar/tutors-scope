@@ -45,7 +45,6 @@ export class UserGrid {
   autoGroupColumnDef = {
     headerName: 'Student',
     width: 100,
-    //field: 'student'
   };
 
   populate(userData) {
@@ -54,11 +53,11 @@ export class UserGrid {
     userData.los.forEach(topic => {
       this.rowData.push(generateRow(student, topic, topic.id));
       topic.los.forEach(l1 => {
-        this.rowData.push(generateRow(student, l1, topic.id, l1.id));
+        if (l1.title) this.rowData.push(generateRow(student, l1, topic.id, l1.id));
         l1.los.forEach(l2 => {
-          this.rowData.push(generateRow(student, l2, topic.id, l1.id, l2.id));
+          if (l2.title) this.rowData.push(generateRow(student, l2, topic.id, l1.id, l2.id));
           l2.los.forEach(l3 => {
-            this.rowData.push(generateRow(student, l3, topic.id, l1.id, l2.id, l3.id));
+            if (l3.title) this.rowData.push(generateRow(student, l3, topic.id, l1.id, l2.id, l3.id));
           });
         });
       });
