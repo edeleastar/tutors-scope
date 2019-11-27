@@ -60,6 +60,16 @@ export class AnalyticsService {
     return users;
   }
 
+  async getUsage(course: Course) {
+    this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
+    const snapshot = await firebase
+      .database()
+      .ref(`${this.courseBaseName}/usage`)
+      .once("value");
+    let usage = this.snapshotToArray(snapshot);
+    return usage;
+  }
+
   async getUserUsage(course: Course, email: string) {
     this.courseBaseName = course.url.substr(0, course.url.indexOf("."));
     const userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");

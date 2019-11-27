@@ -1,4 +1,5 @@
 export interface Row {
+  base: string;
   student: string;
   title: string;
   date: string;
@@ -11,8 +12,9 @@ export interface Row {
 
 const loElements = ["topic", "l1", "l2", "l3"];
 
-function generateRow(student: string, lo, ...params) {
+function generateRow(base:string, student: string, lo, ...params) {
   let row: Row = {
+    base: base,
     student: student,
     title: lo.title,
     date: lo.last,
@@ -28,6 +30,7 @@ export class UserGrid {
 
   rowData = [];
   columnDefs = [
+    { headerName: "Student", field: "base", width: 20, rowGroup: true, hide: true},
     { headerName: "Student", field: "student", width: 20, rowGroup: true, hide: true},
     { headerName: "Topic", field: "topic", width: 10, rowGroup: true, hide: true },
     { headerName: "Element", field: "l1", width: 40, rowGroup: true, hide: true },
@@ -47,17 +50,17 @@ export class UserGrid {
     width: 100,
   };
 
-  populate(userData) {
-    const student = userData.email;
-    this.rowData.push(generateRow(student, userData));
+  populate(userData, base:string) {
+    const student = userData.name;
+    this.rowData.push(generateRow(base, student, userData));
     userData.los.forEach(topic => {
-      this.rowData.push(generateRow(student, topic, topic.id));
+      this.rowData.push(generateRow(base, student, topic, topic.title));
       topic.los.forEach(l1 => {
-        if (l1.title) this.rowData.push(generateRow(student, l1, topic.id, l1.id));
+        if (l1.title) this.rowData.push(generateRow(base, student, l1, topic.title, l1.id));
         l1.los.forEach(l2 => {
-          if (l2.title) this.rowData.push(generateRow(student, l2, topic.id, l1.id, l2.id));
+          if (l2.title) this.rowData.push(generateRow(base, student, l2, topic.title, l1.id, l2.title));
           l2.los.forEach(l3 => {
-            if (l3.title) this.rowData.push(generateRow(student, l3, topic.id, l1.id, l2.id, l3.id));
+            if (l3.title) this.rowData.push(generateRow(base, student, l3, topic.title, l1.id, l2.title, l3.id));
           });
         });
       });
