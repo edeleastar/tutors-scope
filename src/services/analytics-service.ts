@@ -66,8 +66,9 @@ export class AnalyticsService {
       .database()
       .ref(`${this.courseBaseName}/usage`)
       .once("value");
-    let usage = this.snapshotToArray(snapshot);
-    return usage;
+    let los = snapshot.val();
+    let lo = populate('home', los);
+    return lo;
   }
 
   async getUserUsage(course: Course, email: string) {
