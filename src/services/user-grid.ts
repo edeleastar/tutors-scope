@@ -50,23 +50,6 @@ export class UserGrid {
     width: 100,
   };
 
-  // populate(userData, base:string) {
-  //   const student = userData.name;
-  //   this.rowData.push(generateRow(base, student, userData));
-  //   userData.los.forEach(topic => {
-  //     this.rowData.push(generateRow(base, student, topic, topic.title));
-  //     topic.los.forEach(l1 => {
-  //       if (l1.title) this.rowData.push(generateRow(base, student, l1, topic.title, l1.id));
-  //       l1.los.forEach(l2 => {
-  //         if (l2.title) this.rowData.push(generateRow(base, student, l2, topic.title, l1.id, l2.title));
-  //         l2.los.forEach(l3 => {
-  //           if (l3.title) this.rowData.push(generateRow(base, student, l3, topic.title, l1.id, l2.title, l3.id));
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
-
   populate(tutorsData, base:string, l0:string) {
     this.rowData.push(generateRow(base, l0, tutorsData));
     tutorsData.los.forEach(topic => {
