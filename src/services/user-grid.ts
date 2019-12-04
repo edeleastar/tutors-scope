@@ -1,3 +1,5 @@
+import { GridOptions } from "ag-grid-community";
+
 export interface Row {
   base: string;
   student: string;
@@ -12,7 +14,7 @@ export interface Row {
 
 const loElements = ["topic", "l1", "l2", "l3"];
 
-function generateRow(base:string, student: string, lo, ...params) {
+function generateRow(base: string, student: string, lo, ...params) {
   let row: Row = {
     base: base,
     student: student,
@@ -27,18 +29,19 @@ function generateRow(base:string, student: string, lo, ...params) {
 }
 
 export class UserGrid {
-
+  grid = null;
+  gridOptions: GridOptions;
   rowData = [];
   columnDefs = [
-    { headerName: "Student", field: "base", width: 20, rowGroup: true, hide: true},
-    { headerName: "Student", field: "student", width: 20, rowGroup: true, hide: true},
+    { headerName: "Student", field: "base", width: 20, rowGroup: true, hide: true },
+    { headerName: "Student", field: "student", width: 20, rowGroup: true, hide: true },
     { headerName: "Topic", field: "topic", width: 10, rowGroup: true, hide: true },
     { headerName: "Element", field: "l1", width: 40, rowGroup: true, hide: true },
-    { headerName: "Chapter", field: "l2", width: 40, rowGroup: true, hide: true  },
+    { headerName: "Chapter", field: "l2", width: 40, rowGroup: true, hide: true },
     { headerName: "Item", field: "l3", width: 40, rowGroup: false, hide: true },
     { headerName: "Title", field: "title", width: 150 },
-    { headerName: "Date", field: "date", width: 100  },
-    { headerName: "Count", field: "count", width: 50  }
+    { headerName: "Date", field: "date", width: 100 },
+    { headerName: "Count", field: "count", width: 50 }
   ];
   defaultColDef = {
     width: 80,
@@ -46,11 +49,20 @@ export class UserGrid {
     resizable: true
   };
   autoGroupColumnDef = {
-    headerName: 'Student',
-    width: 100,
+    headerName: "Student",
+    width: 100
   };
 
-  populate(tutorsData, base:string, l0:string) {
+  constructor() {
+    this.gridOptions = <GridOptions>{};
+    this.gridOptions.rowData = this.rowData;
+    this.gridOptions.columnDefs = this.columnDefs;
+    this.gridOptions.defaultColDef = this.defaultColDef;
+    this.gridOptions.autoGroupColumnDef = this.autoGroupColumnDef;
+    this.gridOptions.animateRows = true;
+  }
+
+  populate(tutorsData, base: string, l0: string) {
     this.rowData.push(generateRow(base, l0, tutorsData));
     tutorsData.los.forEach(topic => {
       this.rowData.push(generateRow(base, l0, topic, topic.title));
@@ -64,5 +76,14 @@ export class UserGrid {
         });
       });
     });
+  }
+
+  resize(detail) {
+    if (this.grid) this.grid.api.sizeColumnsToFit();
+  }
+
+  private onReady(params) {
+    this.grid = params;
+    params.api.sizeColumnsToFit();
   }
 }
