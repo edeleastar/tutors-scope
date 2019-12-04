@@ -31,16 +31,14 @@ export class CourseView {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     this.navigatorProperties.init(this.course.lo);
-    const usage = await this.analyticsService.getUsage(this.course);
-    this.userGrid.populate(usage, "content", "allUsers");
-    const users = await this.analyticsService.getUsers(this.course);
-    for (let user of users) {
-      let usersUsage = await this.analyticsService.getUserUsage(this.course, user.email);
-      this.userGrid.populate(usersUsage, "students", user.email);
+    const report = await this.analyticsService.getCourseReport(this.course);
+    this.userGrid.populate(report.los[0], "content", "allUsers");
+    for (let user of report.los[1].los) {
+      this.userGrid.populate(user, "students", user.email);
     }
   }
 
-  resize (detail) {
+  resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
   }
 
