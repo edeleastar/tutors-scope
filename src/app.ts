@@ -16,12 +16,8 @@ export class App {
     config.options.pushState = environment.pushState;
     config.options.root = "/";
     config.map([
-      {
-        route: "course/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/course/course-view"),
-        name: "course",
-        title: "Module"
-      }
+      { route: "tutors/*courseurl", moduleId: PLATFORM.moduleName("./components/tutors/tutors-view"), name: "course", title: "Module" },
+      { route: "users/*courseurl", moduleId: PLATFORM.moduleName("./components/users/users-view"), name: "course", title: "Module" },
     ]);
   }
 }
