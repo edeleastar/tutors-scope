@@ -36,16 +36,16 @@ export class Spreadsheet {
     this.gridOptions.rowData = this.rowData;
   }
 
-  populate(tutorsData, l0: string) {
-    this.rowData.push(generateRow(l0, tutorsData));
-    tutorsData.los.forEach(topic => {
-      this.rowData.push(generateRow(l0, topic, topic.id));
-      topic.los.forEach(l1 => {
-        this.rowData.push(generateRow(l0, l1, topic.id, l1.id));
+  populate(tutorsData, root: string) {
+    this.rowData.push(generateRow(root, tutorsData));
+    tutorsData.los.forEach(l0 => {
+      this.rowData.push(generateRow(root, l0, l0.id));
+      l0.los.forEach(l1 => {
+        this.rowData.push(generateRow(root, l1, l0.id, l1.id));
         l1.los.forEach(l2 => {
-          this.rowData.push(generateRow( l0, l2, topic.id, l1.id, l2.id));
+          this.rowData.push(generateRow(root, l2, l0.id, l1.id, l2.id));
           l2.los.forEach(l3 => {
-            this.rowData.push(generateRow( l0, l3, topic.id, l1.id, l2.id, l3.id));
+            this.rowData.push(generateRow(root, l3, l0.id, l1.id, l2.id, l3.id));
           });
         });
       });

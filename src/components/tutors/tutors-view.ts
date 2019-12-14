@@ -9,15 +9,22 @@ export class TutorsView extends BaseView {
   userGrid = new Spreadsheet();
   gridOptions: GridOptions;
   columnDefs = [
-    { headerName: "Root", field: "root", width: 40, rowGroup: true, hide: true },
-    { headerName: "L0", field: "l0", width: 40, rowGroup: true, hide: true },
-    { headerName: "L1", field: "l1", width: 40, rowGroup: true, hide: true },
-    { headerName: "L2", field: "l2", width: 40, rowGroup: false, hide: true },
-    { headerName: "L3", field: "l3", width: 40, rowGroup: false, hide: true},
-    { headerName: "Title", field: "title", width: 150 },
-    { headerName: "Date", field: "date", width: 80 },
+    { headerName: "Topic", field: "root", width: 40, rowGroup: true, hide: true },
+    { headerName: "Unit", field: "l0", width: 40, rowGroup: true, hide: true },
+    { headerName: "Learning Object", field: "l1", width: 40, rowGroup: true, hide: false },
+    { headerName: "Title", field: "title", width: 50 },
+    { headerName: "Date", field: "date", width: 50 },
     { headerName: "Count", field: "count", width: 50 }
   ];
+  autoGroupColumnDef = {
+    headerName: "Topic",
+    width: 100
+  };
+  defaultColDef = {
+    width: 40,
+    sortable: true,
+    resizable: true
+  };
 
   initSpreadhsheet() {
     this.gridOptions = <GridOptions>{};
@@ -26,25 +33,15 @@ export class TutorsView extends BaseView {
     this.gridOptions.groupDefaultExpanded = 0;
     this.gridOptions.columnDefs = this.columnDefs;
     this.userGrid.init(this.gridOptions);
-    //this.gridOptions.defaultColDef = this.defaultColDef;
+    this.gridOptions.defaultColDef = this.defaultColDef;
     // this.gridOptions.autoGroupColumnDef = this.autoGroupColumnDef;
-    // defaultColDef = {
-    //   width: 80,
-    //   sortable: true,
-    //   resizable: true
-    // };
-    // autoGroupColumnDef = {
-    //   headerName: "Student",
-    //   width: 100
-    // };
   }
 
   async activate(params, route) {
     this.initSpreadhsheet();
     await super.activate(params, route);
-    //    this.userGrid.populate(this.report.los[0], "Totals");
-    for (let user of this.report.los[0].los) {
-      this.userGrid.populate(user, user.title);
+    for (let topic of this.report.los[0].los) {
+      this.userGrid.populate(topic, topic.title);
     }
   }
 }

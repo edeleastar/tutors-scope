@@ -23,7 +23,7 @@ export class NavigatorProperties {
     this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
 
     this.sheets = [];
-    this.sheets.push({ link: `#tutors/${this.courseRepo.courseUrl}`, icon: "usage", tip: "Usage" });
-    this.sheets.push({ link: `#users/${this.courseRepo.courseUrl}`, icon: "users", tip: "Users" });
+    this.sheets.push({ link: `tutors/${this.courseRepo.courseUrl}`, icon: "usage", tip: "Usage" });
+    this.sheets.push({ link: `users/${this.courseRepo.courseUrl}`, icon: "users", tip: "Users" });
   }
 }
