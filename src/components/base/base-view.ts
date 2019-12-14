@@ -3,25 +3,19 @@ import { NavigatorProperties } from "../../resources/elements/navigators/navigat
 import { inject } from "aurelia-framework";
 import { AnalyticsService } from "../../services/analytics-service";
 import { Course } from "../../services/course";
-import { UserGrid } from "../../services/user-grid";
-import { EventAggregator } from 'aurelia-event-aggregator';
 
-@inject(CourseRepo, NavigatorProperties, AnalyticsService, EventAggregator)
+@inject(CourseRepo, NavigatorProperties, AnalyticsService)
 export class BaseView {
   courseRepo: CourseRepo;
   navigatorProperties: NavigatorProperties;
   anaylticsService: AnalyticsService;
-  ea : EventAggregator;
-
   course: Course;
-  userGrid = new UserGrid();
   report = null;
 
-  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, analyticsService: AnalyticsService, ea : EventAggregator) {
+  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, analyticsService: AnalyticsService) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.anaylticsService = analyticsService;
-    this.ea = ea;
   }
 
   async activate(params, route) {
