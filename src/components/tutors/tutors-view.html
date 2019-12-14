@@ -1,7 +1,7 @@
 <template>
-  <div style="width: 100%; height: 1200px;"  resizeable resize.trigger="userGrid.resize($event.detail)">
+  <div style="width: 100%; height: 1200px;"  resizeable resize.trigger="spreadsheet.resize($event.detail)">
     <ag-grid-aurelia #agGrid style="width: 100%; height: 100%;" class="ag-theme-balham"
-                     grid-options.bind="gridOptions" grid-ready.call="userGrid.onReady($event)">
+                     grid-options.bind="gridOptions" grid-ready.call="spreadsheet.onReady($event)">
     </ag-grid-aurelia>
   </div>
 </template>
