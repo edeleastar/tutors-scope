@@ -21,7 +21,11 @@ function generateRow(root: string, lo, ...params) {
     count: lo.count
   };
   params.forEach((param, index) => {
-    row[loElements[index]] = param;
+    if (param.title) {
+      row[loElements[index]] = param.title;
+    } else {
+      row[loElements[index]] = param.id;
+    }
   });
   return row;
 }
@@ -31,37 +35,41 @@ export class Spreadsheet {
   gridOptions: GridOptions;
   rowData = [];
 
-  init (gridOptions : GridOptions) {
-    this.gridOptions = gridOptions;
-    this.gridOptions.rowData = this.rowData;
+  init(gridOptions: GridOptions) {
+    //this.gridOptions = gridOptions;
+    //this.gridOptions.rowData = this.rowData;
   }
 
-  populate(tutorsData, root: string) {
-    this.rowData.push(generateRow(root, tutorsData));
+  populate(rowData, tutorsData, root: string) {
+    //let rowData = [];
+    rowData.push(generateRow(root, tutorsData));
     tutorsData.los.forEach(l0 => {
-      this.rowData.push(generateRow(root, l0, l0.id));
+      rowData.push(generateRow(root, l0, l0));
       l0.los.forEach(l1 => {
-        this.rowData.push(generateRow(root, l1, l0.id, l1.id));
+        rowData.push(generateRow(root, l1, l0, l1));
         l1.los.forEach(l2 => {
-          this.rowData.push(generateRow(root, l2, l0.id, l1.id, l2.id));
+          rowData.push(generateRow(root, l2, l0, l1, l2));
           l2.los.forEach(l3 => {
-            this.rowData.push(generateRow(root, l3, l0.id, l1.id, l2.id, l3.id));
+            rowData.push(generateRow(root, l3, l0, l1, l2, l3));
           });
         });
       });
     });
+    //if (this.grid) this.grid.api.setRowData(this.rowData);
+    //return rowData;
   }
 
   resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
   }
 
-  clear () {
+  clear() {
+    this.rowData = [];
   }
 
-  private onReady(params) {
-    this.grid = params;
-    params.api.sizeColumnsToFit();
-    params.api.doLayout();
-  }
+  // onReady(params) {
+  //   this.grid = params;
+  //   params.api.sizeColumnsToFit();
+  //   params.api.doLayout();
+  // }
 }

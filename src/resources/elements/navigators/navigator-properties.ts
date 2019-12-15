@@ -14,7 +14,15 @@ export class NavigatorProperties {
   title: string;
   img: string;
   version = "";
-  sheets: IconNav[] = [];
+  actions : IconNav[] = [
+    { link: '', icon: "excel", tip: "Export" },
+    { link: '', icon: "users", tip: "Group/Ungroup" }
+  ];
+  sheets: IconNav[] = [
+    { link: '', icon: "usage", tip: "Usage" },
+    { link: '', icon: "users", tip: "Users" },
+    { link: '', icon: "excel", tip: "Export" },
+  ];
   constructor(private courseRepo: CourseRepo) {}
 
   init(lo: Lo) {
@@ -22,8 +30,10 @@ export class NavigatorProperties {
     this.img = lo.img;
     this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
 
-    this.sheets = [];
-    this.sheets.push({ link: `tutors/${this.courseRepo.courseUrl}`, icon: "usage", tip: "Usage" });
-    this.sheets.push({ link: `users/${this.courseRepo.courseUrl}`, icon: "users", tip: "Users" });
+    this.sheets[0].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/usage`
+    this.sheets[1].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/users`;
+    this.sheets[2].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/excel`
+    //this.actions[1].link = `${environment.urlPrefix}excel/${this.courseRepo.courseUrl}`;
+
   }
 }

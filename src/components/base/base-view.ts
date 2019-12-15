@@ -11,6 +11,8 @@ export class BaseView {
   anaylticsService: AnalyticsService;
   course: Course;
   report = null;
+  usage = [];
+  users = [];
 
   constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, analyticsService: AnalyticsService) {
     this.courseRepo = courseRepo;
@@ -23,5 +25,6 @@ export class BaseView {
     this.course = this.courseRepo.course;
     this.navigatorProperties.init(this.course.lo);
     this.report = await this.anaylticsService.getCourseReport(this.course);
+
   }
 }
