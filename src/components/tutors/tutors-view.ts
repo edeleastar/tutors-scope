@@ -1,12 +1,14 @@
 import { autoinject } from "aurelia-framework";
-import "ag-grid-enterprise";
-import { BaseView } from "../base/base-view";
 import { GridOptions } from "ag-grid-community";
-import { Spreadsheet } from "../../services/spreadsheet";
+import "ag-grid-enterprise";
+import { CourseRepo } from "../../services/course-repo";
+import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
+import { AnalyticsService } from "../../services/analytics-service";
+import { Course } from "../../services/course";
 
 @autoinject
-export class TutorsView extends BaseView {
-  spreadsheet = new Spreadsheet();
+export class TutorsView {
+  course: Course;
   type = "usage";
   grid = null;
 
@@ -39,29 +41,25 @@ export class TutorsView extends BaseView {
     }
   };
 
-  usage = [];
-  users = [];
+  constructor(
+    private courseRepo: CourseRepo,
+    private navigatorProperties: NavigatorProperties,
+    private analyticsService: AnalyticsService
+  ) {}
 
   async activate(params, route) {
-    this.spreadsheet.init(this.gridOptions);
-    await super.activate(params, route);
-    if (this.usage.length == 0) {
-      for (let topic of this.report.los[0].los) {
-        this.spreadsheet.populate(this.usage, topic, topic.title);
-      }
-    }
-    if (this.users.length == 0) {
-      for (let user of this.report.los[1].los) {
-        this.spreadsheet.populate(this.users, user, user.name);
-      }
-    }
+    await this.courseRepo.fetchCourse(params.courseurl);
+    this.course = this.courseRepo.course;
+    this.navigatorProperties.init(this.course.lo);
+    await this.analyticsService.getCourseReport(this.course);
+
     this.type = params.type;
     if (params.type == "excel") {
       this.grid.api.exportDataAsExcel();
     } else {
       this.update();
     }
-   }
+  }
 
   private onReady(grid) {
     this.grid = grid;
@@ -69,21 +67,19 @@ export class TutorsView extends BaseView {
   }
 
   update() {
-    this.spreadsheet.clear();
     if (this.type === "usage") {
-      if (this.grid) {
-        this.grid.api.setColumnDefs(this.usageColumnDefs);
-        this.grid.api.setRowData(this.usage);
-        this.grid.api.sizeColumnsToFit();
-        this.grid.api.doLayout();
-      }
+      this.render (this.usageColumnDefs, this.analyticsService.usage)
     } else if (this.type == "users") {
-      if (this.grid) {
-        this.grid.api.setColumnDefs(this.usersColumnDefs);
-        this.grid.api.setRowData(this.users);
-        this.grid.api.sizeColumnsToFit();
-        this.grid.api.doLayout();
-      }
+      this.render (this.usersColumnDefs, this.analyticsService.users)
+    }
+  }
+
+  render(columnDefs, data) {
+    if (this.grid) {
+      this.grid.api.setColumnDefs(columnDefs);
+      this.grid.api.setRowData(data);
+      this.grid.api.sizeColumnsToFit();
+      this.grid.api.doLayout();
     }
   }
 
