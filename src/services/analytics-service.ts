@@ -2,6 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import environment from "../environment";
 import { Course } from "./course";
+import {retrieveCourseMeasurements} from "./measures";
 
 interface Row {
   root: string;
@@ -91,6 +92,8 @@ export class AnalyticsService {
       .ref(`${this.courseBaseName}`)
       .once("value");
     let los = snapshot.val();
+
+    const measurements = retrieveCourseMeasurements(los);
     this.tutorsMeasures = expandMeasures("root", los);
     if (this.usage.length === 0) {
       for (let topic of this.tutorsMeasures.los[0].los) {
