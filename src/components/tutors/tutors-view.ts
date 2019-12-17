@@ -1,10 +1,11 @@
 import { autoinject } from "aurelia-framework";
-import { GridOptions } from "ag-grid-community";
 import "ag-grid-enterprise";
 import { CourseRepo } from "../../services/course-repo";
 import { NavigatorProperties } from "../../resources/elements/navigators/navigator-properties";
-import { AnalyticsService } from "../../services/analytics-service";
 import { Course } from "../../services/course";
+import { MetricsService } from "../../services/metrics-service";
+import { UsageSheet } from "../../services/usage-sheet";
+import { UsersSheet } from "../../services/users-sheet";
 
 @autoinject
 export class TutorsView {
@@ -12,47 +13,22 @@ export class TutorsView {
   type = "usage";
   grid = null;
 
-  usageColumnDefs = [
-    { headerName: "Topic", field: "root", width: 40, rowGroup: true, hide: true },
-    { headerName: "Unit", field: "l0", width: 40, rowGroup: true, hide: true },
-    { headerName: "Learning Object", field: "l1", width: 40, rowGroup: true, hide: true },
-    { headerName: "Title", field: "title", width: 50 },
-    { headerName: "Date", field: "date", width: 50 },
-    { headerName: "Count", field: "count", width: 50 }
-  ];
-  usersColumnDefs = [
-    { headerName: "User", field: "root", width: 40, rowGroup: true, hide: true },
-    { headerName: "Topic", field: "l0", width: 40, rowGroup: true, hide: true },
-    { headerName: "Unit", field: "l1", width: 40, rowGroup: true, hide: true },
-    { headerName: "Learning Object", field: "l2", width: 40, rowGroup: true, hide: true },
-    { headerName: "Title", field: "title", width: 100 },
-    { headerName: "Date", field: "date", width: 80 },
-    { headerName: "Count", field: "count", width: 50 }
-  ];
-
-  gridOptions: GridOptions = {
-    animateRows: true,
-    groupHideOpenParents: true,
-    groupDefaultExpanded: 0,
-    defaultColDef: {
-      width: 40,
-      sortable: true,
-      resizable: true
-    }
-  };
+  usageSheet = new UsageSheet();
+  usersSheet = new UsersSheet();
 
   constructor(
     private courseRepo: CourseRepo,
     private navigatorProperties: NavigatorProperties,
-    private analyticsService: AnalyticsService
+    private metricsService: MetricsService
   ) {}
 
   async activate(params, route) {
     await this.courseRepo.fetchCourse(params.courseurl);
     this.course = this.courseRepo.course;
     this.navigatorProperties.init(this.course.lo);
-    await this.analyticsService.getCourseReport(this.course);
-
+    await this.metricsService.retrieveMetrics(this.course);
+    this.usageSheet.bindMetric(this.metricsService.usage);
+    this.usersSheet.bindUsersMetric(this.metricsService.users);
     this.type = params.type;
     if (params.type == "excel") {
       this.grid.api.exportDataAsExcel();
@@ -68,18 +44,9 @@ export class TutorsView {
 
   update() {
     if (this.type === "usage") {
-      this.render (this.usageColumnDefs, this.analyticsService.usage)
+      this.usageSheet.render(this.grid);
     } else if (this.type == "users") {
-      this.render (this.usersColumnDefs, this.analyticsService.users)
-    }
-  }
-
-  render(columnDefs, data) {
-    if (this.grid) {
-      this.grid.api.setColumnDefs(columnDefs);
-      this.grid.api.setRowData(data);
-      this.grid.api.sizeColumnsToFit();
-      this.grid.api.doLayout();
+      this.usersSheet.render(this.grid);
     }
   }
 
