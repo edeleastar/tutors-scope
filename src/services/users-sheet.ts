@@ -3,12 +3,12 @@ import { Metric, UserMetric } from "./metrics-service";
 
 export class UsersSheet extends Sheet {
   columnDefs = [
-    { headerName: "User", field: "root", width: 40, rowGroup: true, hide: true },
-    { headerName: "Topic", field: "l0", width: 40, rowGroup: true, hide: true },
-    { headerName: "Unit", field: "l1", width: 40, rowGroup: true, hide: true },
-    { headerName: "Learning Object", field: "l2", width: 40, rowGroup: true, hide: true },
+    { headerName: "User", field: "root", width: 10, rowGroup: true, hide: true },
+    { headerName: "Topic", field: "l0", width: 10, rowGroup: true, hide: true },
+    { headerName: "Unit", field: "l1", width: 10, rowGroup: true, hide: true },
+    { headerName: "Learning Object", field: "l2", width: 10, rowGroup: true, hide: true },
     { headerName: "Title", field: "title", width: 100 },
-    { headerName: "Date", field: "date", width: 80 },
+    { headerName: "Date", field: "date", width: 50 },
     { headerName: "Count", field: "count", width: 50 }
   ];
 
@@ -21,10 +21,10 @@ export class UsersSheet extends Sheet {
 
   bindUsersMetric(users: UserMetric[]) {
    // this.rowData = [];
-    if (this.rowData.length === 0) {
+   // if (this.rowData.length === 0) {
       for (let user of users) {
         this.populate(user, user.name);
       }
-    }
+   // }
   }
 }

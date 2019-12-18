@@ -1,4 +1,4 @@
-import { GridOptions } from "ag-grid-community";
+import { Grid, GridOptions } from "ag-grid-community";
 import { Metric } from "./metrics-service";
 
 interface Row {
@@ -16,17 +16,6 @@ const loElements = ["l0", "l1", "l2", "l3"];
 
 export class Sheet {
   rowData = [];
-
-  gridOptions: GridOptions = {
-    animateRows: true,
-    groupHideOpenParents: true,
-    groupDefaultExpanded: 0,
-    defaultColDef: {
-      width: 40,
-      sortable: true,
-      resizable: true
-    }
-  };
 
   generateRow(root: string, lo, ...params): Row {
     let row: Row = {
@@ -62,11 +51,11 @@ export class Sheet {
   }
 
   bindMetric(metric: Metric) {
-    if (this.rowData.length === 0) {
+   // if (this.rowData.length === 0) {
       for (let topic of metric.metrics) {
         this.populate(topic, topic.title);
       }
-    }
+    //}
   }
 
   render(grid) {

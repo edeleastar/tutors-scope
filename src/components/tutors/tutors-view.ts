@@ -6,12 +6,25 @@ import { Course } from "../../services/course";
 import { MetricsService } from "../../services/metrics-service";
 import { UsageSheet } from "../../services/usage-sheet";
 import { UsersSheet } from "../../services/users-sheet";
+import {GridOptions} from "ag-grid-community";
 
 @autoinject
 export class TutorsView {
   course: Course;
+  courseUrl = "";
   type = "usage";
   grid = null;
+
+  gridOptions: GridOptions = {
+    animateRows: true,
+    groupHideOpenParents: true,
+    groupDefaultExpanded: 0,
+    defaultColDef: {
+      width: 60,
+      sortable: true,
+      resizable: true
+    }
+  };
 
   usageSheet = new UsageSheet();
   usersSheet = new UsersSheet();
@@ -23,12 +36,15 @@ export class TutorsView {
   ) {}
 
   async activate(params, route) {
-    await this.courseRepo.fetchCourse(params.courseurl);
-    this.course = this.courseRepo.course;
-    this.navigatorProperties.init(this.course.lo);
-    await this.metricsService.retrieveMetrics(this.course);
-    this.usageSheet.bindMetric(this.metricsService.usage);
-    this.usersSheet.bindUsersMetric(this.metricsService.users);
+    if (params.courseurl !== this.courseUrl){
+      this.courseUrl = params.courseurl;
+      await this.courseRepo.fetchCourse(params.courseurl);
+      this.course = this.courseRepo.course;
+      this.navigatorProperties.init(this.course.lo);
+      await this.metricsService.retrieveMetrics(this.course);
+      this.usageSheet.bindMetric(this.metricsService.usage);
+      this.usersSheet.bindUsersMetric(this.metricsService.users);
+    }
     this.type = params.type;
     if (params.type == "excel") {
       this.grid.api.exportDataAsExcel();

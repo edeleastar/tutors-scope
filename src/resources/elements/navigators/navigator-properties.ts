@@ -14,10 +14,7 @@ export class NavigatorProperties {
   title: string;
   img: string;
   version = "";
-  actions : IconNav[] = [
-    { link: '', icon: "excel", tip: "Export" },
-    { link: '', icon: "users", tip: "Group/Ungroup" }
-  ];
+
   sheets: IconNav[] = [
     { link: '', icon: "usage", tip: "Usage" },
     { link: '', icon: "users", tip: "Users" },
@@ -33,7 +30,5 @@ export class NavigatorProperties {
     this.sheets[0].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/usage`
     this.sheets[1].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/users`;
     this.sheets[2].link = `${environment.urlPrefix}tutors/${this.courseRepo.courseUrl}/excel`
-    //this.actions[1].link = `${environment.urlPrefix}excel/${this.courseRepo.courseUrl}`;
-
   }
 }
