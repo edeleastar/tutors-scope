@@ -14,6 +14,7 @@ export interface Metric {
 export interface UserMetric {
   userId: string;
   email: string;
+  picture: string;
   name: string;
   title: string;
   count: number;
@@ -62,6 +63,7 @@ export class MetricsService {
           userId: user.id,
           email: user.email,
           name: user.name,
+          picture: user.picture,
           id: "home",
           title: user.title,
           count: user.count,

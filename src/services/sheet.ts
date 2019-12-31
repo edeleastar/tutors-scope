@@ -2,7 +2,7 @@ import { Grid, GridOptions } from "ag-grid-community";
 import { Metric } from "./metrics-service";
 
 interface Row {
-  root: string;
+  root: any;
   title: string;
   date: string;
   count: string;
@@ -17,9 +17,13 @@ const loElements = ["l0", "l1", "l2", "l3"];
 export class Sheet {
   rowData = [];
 
-  generateRow(root: string, lo, ...params): Row {
+  generateRow(root: any, lo, ...params): Row {
+    let name = root.name;
+    if (root.picture) {
+      name += '||' + root.picture;
+    }
     let row: Row = {
-      root: root,
+      root : name,
       title: lo.title,
       date: lo.last,
       count: lo.count
@@ -34,7 +38,7 @@ export class Sheet {
     return row;
   }
 
-  populate(tutorsData, root: string) {
+  populate(tutorsData, root: any) {
     this.rowData.push(this.generateRow(root, tutorsData));
     tutorsData.metrics.forEach(l0 => {
       this.rowData.push(this.generateRow(root, l0, l0));
@@ -51,11 +55,9 @@ export class Sheet {
   }
 
   bindMetric(metric: Metric) {
-   // if (this.rowData.length === 0) {
-      for (let topic of metric.metrics) {
-        this.populate(topic, topic.title);
-      }
-    //}
+    for (let topic of metric.metrics) {
+      this.populate(topic, { name: topic.title });
+    }
   }
 
   render(grid) {

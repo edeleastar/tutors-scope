@@ -19,8 +19,26 @@ export class TutorsView {
     animateRows: true,
     groupHideOpenParents: true,
     groupDefaultExpanded: 0,
+    //rowHeight : 50,
+    getRowHeight: function(params) {
+      if (params.data) {
+        if (params.data.l0) {
+          return 25;
+        }
+        if (params.data.root) {
+          if (params.data.root.includes('||')) {
+            return 80;
+          }
+        }
+      }
+      if (params.node.group && params.node.field === 'root') {
+        return 80;
+      } else {
+        return 25;
+      }
+    },
     defaultColDef: {
-      width: 60,
+      width: 100,
       sortable: true,
       resizable: true
     }
