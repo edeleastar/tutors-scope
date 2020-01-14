@@ -19,7 +19,8 @@ import {
   faSignOutAlt,
   faTable,
   faLayerGroup,
-  faFileExcel
+  faFileExcel,
+  faUsersCog
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -56,7 +57,8 @@ export class Icon {
     logout : faSignOutAlt,
     users : faAddressCard,
     usage: faLayerGroup,
-    excel : faFileExcel
+    excel : faFileExcel,
+    userscog : faUsersCog
   };
 
   icon(type: string) {
