@@ -7,6 +7,7 @@ import { MetricsService } from "../../services/metrics-service";
 import { UsageSheet } from "../../services/usage-sheet";
 import { UsersSheet } from "../../services/users-sheet";
 import {GridOptions} from "ag-grid-community";
+import {UsersExpandedSheet} from "../../services/users-expanded-sheet";
 
 @autoinject
 export class TutorsView {
@@ -14,6 +15,10 @@ export class TutorsView {
   courseUrl = "";
   type = "usage";
   grid = null;
+  myKeypressCallback: any;
+  pinBuffer = "";
+  ignorePin = "2125";
+  show = false;
 
   gridOptions: GridOptions = {
     animateRows: true,
@@ -27,12 +32,12 @@ export class TutorsView {
         }
         if (params.data.root) {
           if (params.data.root.includes('||')) {
-            return 80;
+            return 140;
           }
         }
       }
       if (params.node.group && params.node.field === 'root') {
-        return 80;
+        return 140;
       } else {
         return 25;
       }
@@ -46,6 +51,7 @@ export class TutorsView {
 
   usageSheet = new UsageSheet();
   usersSheet = new UsersSheet();
+  usersExpandedSheet = new UsersExpandedSheet();
 
   constructor(
     private courseRepo: CourseRepo,
@@ -54,6 +60,8 @@ export class TutorsView {
   ) {}
 
   async activate(params, route) {
+    this.myKeypressCallback = this.keypressInput.bind(this);
+    window.addEventListener("keypress", this.myKeypressCallback, false);
     if (params.courseurl !== this.courseUrl){
       this.courseUrl = params.courseurl;
       await this.courseRepo.fetchCourse(params.courseurl);
@@ -62,6 +70,7 @@ export class TutorsView {
       await this.metricsService.retrieveMetrics(this.course);
       this.usageSheet.bindMetric(this.metricsService.usage);
       this.usersSheet.bindUsersMetric(this.metricsService.users);
+      this.usersExpandedSheet.bindUsersMetric(this.metricsService.users);
     }
     this.type = params.type;
     if (params.type == "excel") {
@@ -80,11 +89,19 @@ export class TutorsView {
     if (this.type === "usage") {
       this.usageSheet.render(this.grid);
     } else if (this.type == "users") {
-      this.usersSheet.render(this.grid);
+      this.usersExpandedSheet.render(this.grid);
     }
   }
 
   resize(detail) {
     if (this.grid) this.grid.api.sizeColumnsToFit();
+  }
+
+  keypressInput(e) {
+    this.pinBuffer = this.pinBuffer.concat(e.key);
+    if (this.pinBuffer === this.ignorePin) {
+      this.pinBuffer = "";
+      this.show = true;
+    }
   }
 }
