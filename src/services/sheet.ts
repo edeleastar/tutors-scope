@@ -17,13 +17,15 @@ export class Sheet {
   generateRow(root: any, lo, ...params): Row {
     let name = root.name;
     if (root.picture) {
-
-
       const fullName = name;
-      var firstName = fullName.split(' ').slice(0, -1).join(' ');
-      var lastName = fullName.split(' ').slice(-1).join(' ');
-      name = lastName + ', ' + firstName;
-      name += "||" + root.picture;
+      if (name === root.email) {
+        name = "~~ " + name;
+      } else {
+        var firstName = fullName.split(' ').slice(0, -1).join(' ');
+        var lastName = fullName.split(' ').slice(-1).join(' ');
+        name = lastName + ', ' + firstName;
+      }
+      name += "||" + root.email + "||" + root.picture;
     }
     let row: Row = {
       root: name,
@@ -61,5 +63,17 @@ export class Sheet {
     grid.api.setRowData(this.rowData);
     grid.api.sizeColumnsToFit();
     grid.api.doLayout();
+  }
+
+  parseUser (userDetails : any) {
+    const fullName = name;
+    if (name === root.email) {
+      name = "~~ " + name;
+    } else {
+      var firstName = fullName.split(' ').slice(0, -1).join(' ');
+      var lastName = fullName.split(' ').slice(-1).join(' ');
+      name = lastName + ', ' + firstName;
+    }
+    name += "||" + root.email + "||" + root.picture;
   }
 }

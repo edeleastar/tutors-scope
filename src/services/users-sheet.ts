@@ -16,10 +16,10 @@ export class UsersSheet extends Sheet {
   renderUserDetails(params: ICellRendererParams) {
     let value = params.value;
     let details = value.split("||");
-    if (details[1]) {
+    if (details[2]) {
       var resultElement = document.createElement("span");
       let el = document.createElement('img');
-      let imgpath = details[1];
+      let imgpath = details[2];
       el.src = imgpath;
       el.width = 100;
       var bold = document.createElement('strong');

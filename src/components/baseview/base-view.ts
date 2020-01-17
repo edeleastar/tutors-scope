@@ -4,12 +4,14 @@ import { NavigatorProperties } from "../../resources/elements/navigators/navigat
 import { Course } from "../../services/course";
 import { MetricsService } from "../../services/metrics-service";
 import { inject } from "aurelia-framework";
+import {App} from "../../app";
 
-@inject(CourseRepo, NavigatorProperties, MetricsService)
+@inject(CourseRepo, NavigatorProperties, MetricsService, App)
 export class BaseView {
   courseRepo: CourseRepo;
   navigatorProperties: NavigatorProperties;
   metricsService: MetricsService;
+  app : App;
 
   course: Course;
   courseUrl = "";
@@ -19,10 +21,12 @@ export class BaseView {
   ignorePin = "2125";
   show = false;
 
-  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, metricsService: MetricsService) {
+  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, metricsService: MetricsService, app : App) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.metricsService = metricsService;
+    this.app = app;
+    this.show = app.authenticated;
   }
 
   async activate(params, route) {
@@ -53,6 +57,7 @@ export class BaseView {
     if (this.pinBuffer === this.ignorePin) {
       this.pinBuffer = "";
       this.show = true;
+      this.app.authenticated = true;
     }
   }
 }

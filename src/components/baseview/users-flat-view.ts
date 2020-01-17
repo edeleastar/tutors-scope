@@ -28,6 +28,10 @@ export class UsersFlatView extends BaseView {
   }
 
   update() {
+    var sort = [
+      {colId: 'name', sort: 'asc'}
+    ];
     this.sheet.render(this.grid);
+    if (this.grid) this.grid.setSortModel(sort);
   }
 }

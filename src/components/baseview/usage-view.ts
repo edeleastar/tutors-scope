@@ -19,8 +19,8 @@ export class UsageView extends BaseView {
 
   async activate(params, route) {
     await super.activate(params, route);
-    for (let user of this.metricsService.users) {
-      this.sheet.populate(user, user);
+    for (let topic of this.metricsService.usage.metrics) {
+      this.sheet.populate(topic, { name: topic.title });
     }
     this.update();
   }
