@@ -1,6 +1,3 @@
-import { Grid, GridOptions } from "ag-grid-community";
-import { Metric } from "./metrics-service";
-
 interface Row {
   root: any;
   title: string;
@@ -20,10 +17,16 @@ export class Sheet {
   generateRow(root: any, lo, ...params): Row {
     let name = root.name;
     if (root.picture) {
-      name += '||' + root.picture;
+
+
+      const fullName = name;
+      var firstName = fullName.split(' ').slice(0, -1).join(' ');
+      var lastName = fullName.split(' ').slice(-1).join(' ');
+      name = lastName + ', ' + firstName;
+      name += "||" + root.picture;
     }
     let row: Row = {
-      root : name,
+      root: name,
       title: lo.title,
       date: lo.last,
       count: lo.count
@@ -52,12 +55,6 @@ export class Sheet {
         });
       });
     });
-  }
-
-  bindMetric(metric: Metric) {
-    for (let topic of metric.metrics) {
-      this.populate(topic, { name: topic.title });
-    }
   }
 
   render(grid) {
