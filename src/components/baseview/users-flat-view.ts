@@ -11,27 +11,30 @@ export class UsersFlatView extends BaseView {
     groupHideOpenParents: true,
     groupDefaultExpanded: 0,
     defaultColDef: {
-      width: 100,
+      width: 120,
       sortable: true,
       resizable: true
     }
   };
-
+  sort = [
+    {colId: 'name', sort: 'asc'}
+  ];
   sheet = new UsersFlatSheet();
 
   async activate(params, route) {
     await super.activate(params, route);
     for (let user of this.metricsService.users) {
       this.sheet.populate(user, user);
+      if (this.grid) this.grid.api.setSortModel(this.sort);
     }
     this.update();
   }
 
   update() {
-    var sort = [
-      {colId: 'name', sort: 'asc'}
-    ];
+
     this.sheet.render(this.grid);
-    if (this.grid) this.grid.setSortModel(sort);
+    if (this.grid)  {
+      this.grid.api.setSortModel(this.sort);
+    }
   }
 }

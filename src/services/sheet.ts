@@ -15,18 +15,7 @@ export class Sheet {
   rowData = [];
 
   generateRow(root: any, lo, ...params): Row {
-    let name = root.name;
-    if (root.picture) {
-      const fullName = name;
-      if (name === root.email) {
-        name = "~~ " + name;
-      } else {
-        var firstName = fullName.split(' ').slice(0, -1).join(' ');
-        var lastName = fullName.split(' ').slice(-1).join(' ');
-        name = lastName + ', ' + firstName;
-      }
-      name += "||" + root.email + "||" + root.picture;
-    }
+    let name = this.genNameStr(root);
     let row: Row = {
       root: name,
       title: lo.title,
@@ -65,15 +54,25 @@ export class Sheet {
     grid.api.doLayout();
   }
 
-  parseUser (userDetails : any) {
-    const fullName = name;
-    if (name === root.email) {
+  genNameStr(user: any) {
+    let name = user.name;
+    const fullName = user.name;
+    if (name === user.email) {
       name = "~~ " + name;
     } else {
-      var firstName = fullName.split(' ').slice(0, -1).join(' ');
-      var lastName = fullName.split(' ').slice(-1).join(' ');
-      name = lastName + ', ' + firstName;
+      var firstName = fullName
+        .split(" ")
+        .slice(0, -1)
+        .join(" ");
+      var lastName = fullName
+        .split(" ")
+        .slice(-1)
+        .join(" ");
+      name = lastName + ", " + firstName;
     }
-    name += "||" + root.email + "||" + root.picture;
+    name += "||" + user.email + "||" + user.picture;
+    return name;
   }
+
+
 }

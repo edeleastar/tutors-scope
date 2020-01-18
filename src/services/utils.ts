@@ -123,13 +123,32 @@ export function analyicsPageTitle(courseId: string, course: Course, lo: Lo) {
 var key = CryptoJS.enc.Hex.parse("000102030405060708090a0b0c0d0e0f");
 var iv = CryptoJS.enc.Hex.parse("101112131415161718191a1b1c1d1e1f");
 
-export function encrypt (str: string) : string {
+export function encrypt(str: string): string {
   const ciphertext = CryptoJS.AES.encrypt(str, key, { iv: iv });
   const value = ciphertext.toString();
   return value;
 }
-export function decrypt (str: string) : string {
-  const raw = CryptoJS.AES.decrypt(str, key, {iv: iv});
+export function decrypt(str: string): string {
+  const raw = CryptoJS.AES.decrypt(str, key, { iv: iv });
   const value = raw.toString(CryptoJS.enc.Utf8);
   return value;
+}
+
+export function genNameNode(name: string) {
+  let details = name.split("||");
+  var nameElement = document.createElement("span");
+  var bold = document.createElement("strong");
+  var textnode = document.createTextNode(`${details[0]} (${details[1]}`);
+  bold.appendChild(textnode);
+  nameElement.appendChild(bold);
+  return nameElement;
+}
+
+export function genImageNode(name: string) {
+  let details = name.split("||");
+  let el = document.createElement("img");
+  let imgpath = details[2];
+  el.src = imgpath;
+  el.width = 100;
+  return el;
 }

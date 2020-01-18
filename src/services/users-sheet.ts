@@ -1,6 +1,7 @@
 import { Sheet } from "./sheet";
 import { UserMetric } from "./metrics-service";
 import { ICellRendererParams } from "ag-grid-community";
+import {genImageNode, genNameNode} from "./utils";
 
 export class UsersSheet extends Sheet {
   columnDefs = [
@@ -14,24 +15,13 @@ export class UsersSheet extends Sheet {
   ];
 
   renderUserDetails(params: ICellRendererParams) {
-    let value = params.value;
-    let details = value.split("||");
-    if (details[2]) {
-      var resultElement = document.createElement("span");
-      let el = document.createElement('img');
-      let imgpath = details[2];
-      el.src = imgpath;
-      el.width = 100;
-      var bold = document.createElement('strong');
-      var textnode = document.createTextNode(`${params.rowIndex+1}: ${details[0]}`);
-      bold.appendChild(textnode);
-      resultElement.appendChild(el);
-      resultElement.appendChild(document.createElement('br'));
-      resultElement.appendChild(bold)
-      return resultElement;
-    } else {
-      return value;
-    }
+    const nameNode = genNameNode(params.value);
+    const imgNode = genImageNode(params.value);
+    var resultElement = document.createElement("span");
+    resultElement.appendChild(imgNode);
+    resultElement.appendChild(document.createElement('br'));
+    resultElement.appendChild(nameNode);
+    return resultElement;
   }
 
   render(grid) {
