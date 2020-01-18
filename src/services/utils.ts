@@ -138,9 +138,13 @@ export function genNameNode(name: string) {
   let details = name.split("||");
   var nameElement = document.createElement("span");
   var bold = document.createElement("strong");
-  var textnode = document.createTextNode(`${details[0]} (${details[1]}`);
-  bold.appendChild(textnode);
+  var nameNode = document.createTextNode(`${details[0]}`);
+  bold.appendChild(nameNode);
   nameElement.appendChild(bold);
+  if (details[0]=== '~~ ') {
+    var emailNode = document.createTextNode(` (${details[1]})`);
+    nameElement.appendChild(emailNode);
+  }
   return nameElement;
 }
 

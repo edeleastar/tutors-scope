@@ -61,7 +61,7 @@ export class Sheet {
     let name = user.name;
     const fullName = user.name;
     if (name === user.email) {
-      name = "~~ " + name;
+      name = "~~ ";
     } else {
       var firstName = fullName
         .split(" ")
