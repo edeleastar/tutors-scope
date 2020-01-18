@@ -8,6 +8,7 @@ import { NavigatorProperties } from "./resources/elements/navigators/navigator-p
 @autoinject
 export class App {
   title = "Tutors";
+  authenticated = false;
 
   constructor(private navigatorProperties: NavigatorProperties, private courseRepo: CourseRepo) {}
 
@@ -16,7 +17,9 @@ export class App {
     config.options.pushState = environment.pushState;
     config.options.root = "/";
     config.map([
-      { route: "tutors/*courseurl/:type", moduleId: PLATFORM.moduleName("./components/tutors/tutors-view"), name: "course", title: "Module" },
+      { route: "usage/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/usage-view"), name: "usage", title: "Aggregate Usage Data" },
+      { route: "users/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/users-view"), name: "users", title: "Data by User" },
+      { route: "usersflat/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/users-flat-view"), name: "users", title: "Data by User Flattened" },
     ]);
   }
 }

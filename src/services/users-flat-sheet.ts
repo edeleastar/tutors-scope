@@ -1,9 +1,9 @@
 import { Sheet } from "./sheet";
-import { UserMetric } from "./metrics-service";
-import { ICellRendererParams } from "ag-grid-community";
-import {genImageNode, genNameNode} from "./utils";
+import {ICellRendererParams} from "ag-grid-community";
+import {genNameNode} from "./utils";
 
-export class UsersSheet extends Sheet {
+export class UsersFlatSheet extends Sheet {
+
   columnDefs = [
     { headerName: "User", field: "root", autoHeight:true, width: 30, rowGroup: true, hide: true, cellRenderer: this.renderUserDetails,  cellStyle: {color: 'red', 'background-color': 'green'} },
     { headerName: "Topic", field: "l0", width: 50, rowGroup: true, hide: true },
@@ -15,13 +15,7 @@ export class UsersSheet extends Sheet {
   ];
 
   renderUserDetails(params: ICellRendererParams) {
-    const nameNode = genNameNode(params.value);
-    const imgNode = genImageNode(params.value);
-    var resultElement = document.createElement("span");
-    resultElement.appendChild(imgNode);
-    resultElement.appendChild(document.createElement('br'));
-    resultElement.appendChild(nameNode);
-    return resultElement;
+    return genNameNode(params.value);
   }
 
   render(grid) {
