@@ -15,7 +15,10 @@ export class Sheet {
   rowData = [];
 
   generateRow(root: any, lo, ...params): Row {
-    let name = this.genNameStr(root);
+    let name = root.name;
+    if (root.picture) {
+      name = this.genNameStr(root);
+    }
     let row: Row = {
       root: name,
       title: lo.title,

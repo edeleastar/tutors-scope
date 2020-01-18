@@ -27,8 +27,8 @@ export class NavigatorProperties {
     this.img = lo.img;
     this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
 
-    this.sheets[0].link = `usage/${environment.urlPrefix}/${this.courseRepo.courseUrl}`;
-    this.sheets[1].link = `users/${environment.urlPrefix}/${this.courseRepo.courseUrl}`;
-    this.sheets[2].link = `usersflat/${environment.urlPrefix}/${this.courseRepo.courseUrl}`;
+    this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[2].link = `usersflat/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
   }
 }
