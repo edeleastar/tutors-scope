@@ -144,6 +144,15 @@ export function genNameNode(name: string) {
   if (details[0]=== '~~ ') {
     var emailNode = document.createTextNode(` (${details[1]})`);
     nameElement.appendChild(emailNode);
+   }
+  if (details[3] !== 'undefined') {
+    var a = document.createElement('a');
+    var linkText = document.createTextNode(" (github) ");
+    a.appendChild(linkText);
+    a.title = details[3];
+    a.href = "http://github.com/" + a.title;
+    a.setAttribute('target', '_blank');
+    nameElement.appendChild(a);
   }
   return nameElement;
 }
