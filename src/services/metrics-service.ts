@@ -64,6 +64,7 @@ export class MetricsService {
           email: user.email,
           name: user.name,
           picture: user.picture,
+          nickname: user.nickname,
           id: "home",
           title: user.title,
           count: user.count,
