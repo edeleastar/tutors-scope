@@ -47,6 +47,20 @@ export class MetricsService {
     return metric;
   }
 
+  findInMetric (title : string, metric : Metric[]) {
+
+  }
+
+  findInUser (title : string, metric : UserMetric) {
+    if (title === metric.title) {
+      return metric;
+    } else if (metric.metrics.length > 0){
+      return this.findInMetric (title, metric.metrics);
+    } else {
+      return null
+    }
+  }
+
   async retrieveMetrics(course: Course) {
     if (!this.course || this.course != course) {
       this.course = course;

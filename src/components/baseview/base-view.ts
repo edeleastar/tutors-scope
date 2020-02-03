@@ -35,9 +35,16 @@ export class BaseView {
     if (params.courseurl !== this.courseUrl) {
       this.courseUrl = params.courseurl;
       await this.courseRepo.fetchCourse(params.courseurl);
+      this.courseRepo.course.populate();
       this.course = this.courseRepo.course;
       this.navigatorProperties.init(this.course.lo);
       await this.metricsService.retrieveMetrics(this.course);
+
+      const labs = this.courseRepo.course.walls.get('lab');
+      for (let lab of labs) {
+        const result = this.metricsService.find(lab.title, this.metricsService.users[0])
+        console.log(result);
+      }
     }
   }
 

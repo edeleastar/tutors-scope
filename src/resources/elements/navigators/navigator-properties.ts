@@ -19,7 +19,7 @@ export class NavigatorProperties {
     { link: '', icon: "usage", tip: "Usage" },
     { link: '', icon: "users", tip: "Users" },
     { link: '', icon: "userscog", tip: "Users Flattened" },
-   // { link: '', icon: "excel", tip: "Excel View" },
+    { link: '', icon: "excel", tip: "Excel View" },
   ];
   constructor(private courseRepo: CourseRepo) {}
 
@@ -31,6 +31,6 @@ export class NavigatorProperties {
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[2].link = `usersflat/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-   // this.sheets[3].link = `excel/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[3].link = `excel/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
   }
 }
