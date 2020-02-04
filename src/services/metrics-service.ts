@@ -2,6 +2,7 @@ import { Course } from "./course";
 import * as firebase from "firebase/app";
 import "firebase/database";
 import environment from "../environment";
+import {Lo} from "./lo";
 
 export interface Metric {
   id: string;
@@ -20,12 +21,14 @@ export interface UserMetric {
   count: number;
   last: string;
   metrics: Metric[];
+  labActivity : Metric[];
 }
 
 export class MetricsService {
   usage: Metric;
   users: UserMetric[] = [];
   course: Course;
+  allLabs : Lo[]
 
   constructor() {
     firebase.initializeApp(environment.firebase);
@@ -47,17 +50,37 @@ export class MetricsService {
     return metric;
   }
 
-  findInMetric (title : string, metric : Metric[]) {
-
-  }
-
-  findInUser (title : string, metric : UserMetric) {
+  findInMetric(title: string, metric: Metric) {
     if (title === metric.title) {
       return metric;
-    } else if (metric.metrics.length > 0){
-      return this.findInMetric (title, metric.metrics);
+    } else if (metric.metrics.length > 0) {
+      return this.findInMetrics(title, metric.metrics);
     } else {
-      return null
+      return null;
+    }
+  }
+
+  findInMetrics(title: string, metrics: Metric[]) {
+    for (let metric of metrics) {
+      const result = this.findInMetric(title, metric);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
+  }
+
+  findInUser(title: string, metric: UserMetric) {
+    return this.findInMetrics(title, metric.metrics);
+  }
+
+  populateUserStats (course : Course) {
+    this.allLabs = course.walls.get("lab");
+    for (let user of this.users) {
+      for (let lab of this.allLabs) {
+        const labActivity = this.findInUser(lab.title, user);
+        user.labActivity.push(labActivity);
+      }
     }
   }
 
@@ -83,7 +106,8 @@ export class MetricsService {
           title: user.title,
           count: user.count,
           last: user.last,
-          metrics: user.metrics
+          metrics: user.metrics,
+          labActivity : [],
         };
         this.users.push(userMetric);
       }
