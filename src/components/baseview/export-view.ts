@@ -1,10 +1,71 @@
 import "ag-grid-enterprise";
-import { UsageSheet } from "../../services/usage-sheet";
-import { UsersFlatSheet } from "../../services/users-flat-sheet";
 import { GridOptions } from "ag-grid-community";
-import { UsersSheet } from "../../services/users-sheet";
 import { BaseView } from "./base-view";
-import {UsersExportSheet} from "../../services/users-export-sheet";
+import { UserMetric } from "../../services/metrics-service";
+import { Lo } from "../../services/lo";
+
+class Sheet {
+  columnDefs = [{ headerName: "User", field: "user", width: 50 }];
+
+  formatName( userName : string, email : string) {
+    let name = userName;
+    const fullName = name;
+    if (name === email) {
+      name = "~~ ";
+    } else {
+      var firstName = fullName
+        .split(" ")
+        .slice(0, -1)
+        .join(" ");
+      var lastName = fullName
+        .split(" ")
+        .slice(-1)
+        .join(" ");
+      name = lastName + ", " + firstName;
+    }
+    return name;
+  }
+
+  populateCols(los: Lo[]) {
+    for (let lab of los) {
+      for (let step of lab.los) {
+        this.columnDefs.push({
+          headerName: step.shortTitle,
+          width: 5,
+          field: lab.title + step.shortTitle
+        });
+      }
+    }
+  }
+
+  populateRow(user: UserMetric) {
+    let row = {
+      user: this.formatName(user.name, user.email)
+    };
+    for (let labMetric of user.labActivity) {
+      if (labMetric) {
+        console.log(labMetric.title);
+        for (let stepMetric of labMetric.metrics) {
+          console.log(`${labMetric.title + stepMetric.title}`);
+          row[`${labMetric.title + stepMetric.title}`] = stepMetric.count;
+        }
+      }
+    }
+    this.rowData.push(row);
+  }
+
+  rowData = [];
+
+  render(grid) {
+    if (grid) {
+      grid.api.setColumnDefs(this.columnDefs);
+      grid.api.setRowData(this.rowData);
+      //grid.api.sizeColumnsToFit();
+      //grid.api.doLayout();
+      //grid.api.autoSizeAllColumns();
+    }
+  }
+}
 
 export class ExportView extends BaseView {
   gridOptions: GridOptions = {
@@ -17,24 +78,25 @@ export class ExportView extends BaseView {
       resizable: true
     }
   };
-  sort = [
-    {colId: 'name', sort: 'asc'}
-  ];
-  sheet = new UsersExportSheet();
+  sort = [{ colId: "name", sort: "asc" }];
+  sheet = new Sheet();
 
   async activate(params, route) {
     await super.activate(params, route);
+    this.sheet.populateCols(this.metricsService.allLabs);
     for (let user of this.metricsService.users) {
-      this.sheet.populateExport(user, user);
-      if (this.grid) this.grid.api.setSortModel(this.sort);
+      this.sheet.populateRow(user);
+      if (this.grid) {
+        this.grid.api.setSortModel(this.sort);
+        this.grid.api.autoSizeAllColumns();
+      }
     }
     this.update();
   }
 
   update() {
-
     this.sheet.render(this.grid);
-    if (this.grid)  {
+    if (this.grid) {
       this.grid.api.setSortModel(this.sort);
     }
   }
