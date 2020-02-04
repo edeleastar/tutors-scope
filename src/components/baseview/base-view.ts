@@ -4,14 +4,14 @@ import { NavigatorProperties } from "../../resources/elements/navigators/navigat
 import { Course } from "../../services/course";
 import { MetricsService } from "../../services/metrics-service";
 import { inject } from "aurelia-framework";
-import {App} from "../../app";
+import { App } from "../../app";
 
 @inject(CourseRepo, NavigatorProperties, MetricsService, App)
 export class BaseView {
   courseRepo: CourseRepo;
   navigatorProperties: NavigatorProperties;
   metricsService: MetricsService;
-  app : App;
+  app: App;
 
   course: Course;
   courseUrl = "";
@@ -21,7 +21,12 @@ export class BaseView {
   ignorePin = "2125";
   show = false;
 
-  constructor(courseRepo: CourseRepo, navigatorProperties: NavigatorProperties, metricsService: MetricsService, app : App) {
+  constructor(
+    courseRepo: CourseRepo,
+    navigatorProperties: NavigatorProperties,
+    metricsService: MetricsService,
+    app: App
+  ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.metricsService = metricsService;
@@ -39,12 +44,7 @@ export class BaseView {
       this.course = this.courseRepo.course;
       this.navigatorProperties.init(this.course.lo);
       await this.metricsService.retrieveMetrics(this.course);
-
-      const labs = this.courseRepo.course.walls.get('lab');
-      for (let lab of labs) {
-        const result = this.metricsService.find(lab.title, this.metricsService.users[0])
-        console.log(result);
-      }
+      this.metricsService.populateUserStats(this.courseRepo.course);
     }
   }
 
