@@ -2,7 +2,7 @@ import { Course } from "./course";
 import * as firebase from "firebase/app";
 import "firebase/database";
 import environment from "../environment";
-import {Lo} from "./lo";
+import { Lo } from "./lo";
 
 export interface Metric {
   id: string;
@@ -21,14 +21,14 @@ export interface UserMetric {
   count: number;
   last: string;
   metrics: Metric[];
-  labActivity : Metric[];
+  labActivity: Metric[];
 }
 
 export class MetricsService {
   usage: Metric;
   users: UserMetric[] = [];
   course: Course;
-  allLabs : Lo[]
+  allLabs: Lo[] = [];
 
   constructor() {
     firebase.initializeApp(environment.firebase);
@@ -74,12 +74,14 @@ export class MetricsService {
     return this.findInMetrics(title, metric.metrics);
   }
 
-  populateUserStats (course : Course) {
-    this.allLabs = course.walls.get("lab");
-    for (let user of this.users) {
-      for (let lab of this.allLabs) {
-        const labActivity = this.findInUser(lab.title, user);
-        user.labActivity.push(labActivity);
+  populateUserStats(course: Course) {
+    if (this.allLabs.length == 0) {
+      this.allLabs = course.walls.get("lab");
+      for (let user of this.users) {
+        for (let lab of this.allLabs) {
+          const labActivity = this.findInUser(lab.title, user);
+          user.labActivity.push(labActivity);
+        }
       }
     }
   }
@@ -107,7 +109,7 @@ export class MetricsService {
           count: user.count,
           last: user.last,
           metrics: user.metrics,
-          labActivity : [],
+          labActivity: []
         };
         this.users.push(userMetric);
       }

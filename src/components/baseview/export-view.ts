@@ -5,13 +5,17 @@ import { UserMetric } from "../../services/metrics-service";
 import { Lo } from "../../services/lo";
 
 class Sheet {
-  columnDefs = [{ headerName: "User", field: "user", width: 50 }];
+  columnDefs = [
+    { headerName: "User", field: "user", width: 50 },
+    { headerName: "Summary", field: "summary", width: 10 },
+    { headerName: "Date Last Accessed", field: "date" }
+  ];
 
-  formatName( userName : string, email : string) {
+  formatName(userName: string, email: string) {
     let name = userName;
     const fullName = name;
     if (name === email) {
-      name = "~~ ";
+      name = "~~ " + email;
     } else {
       var firstName = fullName
         .split(" ")
@@ -40,17 +44,22 @@ class Sheet {
 
   populateRow(user: UserMetric) {
     let row = {
-      user: this.formatName(user.name, user.email)
+      user: this.formatName(user.name, user.email),
+      summary: 0,
+      date: user.last
     };
+    let summaryCount = 0;
     for (let labMetric of user.labActivity) {
       if (labMetric) {
         console.log(labMetric.title);
         for (let stepMetric of labMetric.metrics) {
           console.log(`${labMetric.title + stepMetric.title}`);
           row[`${labMetric.title + stepMetric.title}`] = stepMetric.count;
+          summaryCount = summaryCount + stepMetric.count;
         }
       }
     }
+    row.summary = summaryCount;
     this.rowData.push(row);
   }
 
@@ -98,6 +107,7 @@ export class ExportView extends BaseView {
     this.sheet.render(this.grid);
     if (this.grid) {
       this.grid.api.setSortModel(this.sort);
+      this.grid.api.autoSizeAllColumns();
     }
   }
 }
