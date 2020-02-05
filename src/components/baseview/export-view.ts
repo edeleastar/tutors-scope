@@ -69,9 +69,6 @@ class Sheet {
     if (grid) {
       grid.api.setColumnDefs(this.columnDefs);
       grid.api.setRowData(this.rowData);
-      //grid.api.sizeColumnsToFit();
-      //grid.api.doLayout();
-      //grid.api.autoSizeAllColumns();
     }
   }
 }
