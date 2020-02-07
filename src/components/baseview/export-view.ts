@@ -1,14 +1,15 @@
 import "ag-grid-enterprise";
-import { GridOptions } from "ag-grid-community";
+import {GridOptions, ICellRendererParams} from "ag-grid-community";
 import { BaseView } from "./base-view";
 import { UserMetric } from "../../services/metrics-service";
 import { Lo } from "../../services/lo";
+import {genImageNode, genNameNode} from "../../services/utils";
 
 class Sheet {
-  columnDefs = [
+  columnDefs:any = [
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
-    { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true  },
-    { headerName: "Date Last Accessed", field: "date" }
+    { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true },
+    { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true  }
   ];
 
   formatName(userName: string, email: string) {
@@ -37,10 +38,25 @@ class Sheet {
           headerName: step.shortTitle,
           width: 60,
           field: lab.title + step.shortTitle,
-          suppressSizeToFit: true
+          suppressSizeToFit: true,
+          cellClassRules: {
+            'green-5': 'x >= 5',
+            'green-4': 'x >= 4 && x < 5',
+            'green-3': 'x >= 3 && x < 4',
+            'green-2': 'x >= 2 && x < 3',
+            'green-1': 'x >= 1 && x < 2',
+            'red': 'x >= 0 && x < 1'
+          }
         });
       }
     }
+  }
+
+  renderUserDetails(params: ICellRendererParams) {
+    var t = document.createElement("span");
+    t.innerText = params.value;
+    t.style.backgroundColor="green"
+    return t;
   }
 
   populateRow(user: UserMetric, los: Lo[]) {
@@ -82,15 +98,15 @@ class Sheet {
 export class ExportView extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
-    groupHideOpenParents: true,
-    groupDefaultExpanded: 0,
+    //groupHideOpenParents: true,
+    //groupDefaultExpanded: 0,
     headerHeight: 180,
     // pivotGroupHeaderHeight:30,
-    // defaultColDef: {
-    //   width: 120,
-    //   sortable: true,
-    //   resizable: true
-    // }
+    defaultColDef: {
+      width: 120,
+      sortable: true,
+      resizable: true
+    }
   };
   sort = [{ colId: "name", sort: "asc" }];
   sheet = new Sheet();
@@ -112,7 +128,7 @@ export class ExportView extends BaseView {
     this.sheet.render(this.grid);
     if (this.grid) {
       //this.grid.api.setSortModel(this.sort);
-     // this.grid.api.autoSizeAllColumns();
+      // this.grid.api.autoSizeAllColumns();
     }
   }
 }

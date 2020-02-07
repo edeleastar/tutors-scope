@@ -45,3 +45,23 @@
   icons not used*/
   /*margin-top: 25px;*/
 }
+
+.red {
+  background-color: red;
+}
+.green-1 {
+  background-color: springgreen;
+}
+.green-2 {
+  background-color:limegreen;
+}
+.green-3 {
+  background-color: mediumseagreen;
+}
+.green-4 {
+  background-color: green;
+}
+.green-5 {
+  background-color: darkgreen;
+}
+
