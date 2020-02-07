@@ -42,18 +42,23 @@ class Sheet {
     }
   }
 
-  populateRow(user: UserMetric) {
+  populateRow(user: UserMetric, los: Lo[]) {
     let row = {
       user: this.formatName(user.name, user.email),
       summary: 0,
       date: user.last
     };
+
+    for (let lab of los) {
+      for (let step of lab.los) {
+        row[`${lab.title + step.shortTitle}`] = 0;
+      }
+    }
+
     let summaryCount = 0;
     for (let labMetric of user.labActivity) {
       if (labMetric) {
-        console.log(labMetric.title);
         for (let stepMetric of labMetric.metrics) {
-          console.log(`${labMetric.title + stepMetric.title}`);
           row[`${labMetric.title + stepMetric.title}`] = stepMetric.count;
           summaryCount = summaryCount + stepMetric.count;
         }
@@ -91,7 +96,7 @@ export class ExportView extends BaseView {
     await super.activate(params, route);
     this.sheet.populateCols(this.metricsService.allLabs);
     for (let user of this.metricsService.users) {
-      this.sheet.populateRow(user);
+      this.sheet.populateRow(user, this.metricsService.allLabs);
       if (this.grid) {
         this.grid.api.setSortModel(this.sort);
         this.grid.api.autoSizeAllColumns();
