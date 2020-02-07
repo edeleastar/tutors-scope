@@ -6,8 +6,8 @@ import { Lo } from "../../services/lo";
 
 class Sheet {
   columnDefs = [
-    { headerName: "User", field: "user", width: 50 },
-    { headerName: "Summary", field: "summary", width: 10 },
+    { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
+    { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true  },
     { headerName: "Date Last Accessed", field: "date" }
   ];
 
@@ -35,8 +35,9 @@ class Sheet {
       for (let step of lab.los) {
         this.columnDefs.push({
           headerName: step.shortTitle,
-          width: 5,
-          field: lab.title + step.shortTitle
+          width: 60,
+          field: lab.title + step.shortTitle,
+          suppressSizeToFit: true
         });
       }
     }
@@ -83,11 +84,13 @@ export class ExportView extends BaseView {
     animateRows: true,
     groupHideOpenParents: true,
     groupDefaultExpanded: 0,
-    defaultColDef: {
-      width: 120,
-      sortable: true,
-      resizable: true
-    }
+    headerHeight: 180,
+    // pivotGroupHeaderHeight:30,
+    // defaultColDef: {
+    //   width: 120,
+    //   sortable: true,
+    //   resizable: true
+    // }
   };
   sort = [{ colId: "name", sort: "asc" }];
   sheet = new Sheet();
@@ -108,8 +111,8 @@ export class ExportView extends BaseView {
   update() {
     this.sheet.render(this.grid);
     if (this.grid) {
-      this.grid.api.setSortModel(this.sort);
-      this.grid.api.autoSizeAllColumns();
+      //this.grid.api.setSortModel(this.sort);
+     // this.grid.api.autoSizeAllColumns();
     }
   }
 }
