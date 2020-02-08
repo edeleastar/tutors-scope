@@ -1,6 +1,6 @@
 import { Sheet } from "./sheet";
 import { ICellRendererParams } from "ag-grid-community";
-import {genImageNode, genNameNode} from "./utils";
+import {genImageNode, genNameNode} from "../../services/utils";
 
 export class UsersSheet extends Sheet {
   columnDefs = [

@@ -1,14 +1,13 @@
 import "ag-grid-enterprise";
 import { GridOptions } from "ag-grid-community";
-import { BaseView } from "./base-view";
-import { LabsSheet } from "../../services/labs-sheet";
+import { BaseView } from "../baseview/base-view";
+import { LabsSheet } from "../sheets/labs-sheet";
 
 export class LabsView extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
     headerHeight: 180,
     defaultColDef: {
-      //width: 120,
       sortable: true,
       resizable: true
     }

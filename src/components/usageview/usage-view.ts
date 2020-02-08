@@ -1,7 +1,7 @@
 import "ag-grid-enterprise";
-import { UsageSheet } from "../../services/usage-sheet";
+import { UsageSheet } from "../sheets/usage-sheet";
 import { GridOptions } from "ag-grid-community";
-import { BaseView } from "./base-view";
+import { BaseView } from "../baseview/base-view";
 
 export class UsageView extends BaseView {
   gridOptions: GridOptions = {
