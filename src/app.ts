@@ -17,10 +17,9 @@ export class App {
     config.options.pushState = environment.pushState;
     config.options.root = "/";
     config.map([
-      { route: "usage/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/usage-view"), name: "usage", title: "Aggregate Usage Data" },
-      { route: "users/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/users-view"), name: "users", title: "Data by User" },
-      { route: "usersflat/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/users-flat-view"), name: "users", title: "Data by User Flattened" },
-      { route: "excel/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/export-view"), name: "users", title: "Export to Excel View" },
+      { route: "usage/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/usage-view"), name: "usage", title: "Aggregate Topic Data" },
+      { route: "users/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/users-view"), name: "users", title: "Topics by User" },
+      { route: "excel/*courseurl", moduleId: PLATFORM.moduleName("./components/baseview/labs-view"), name: "users", title: "Labs Interaction Patterns" },
     ]);
   }
 }

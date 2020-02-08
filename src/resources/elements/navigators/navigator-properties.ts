@@ -16,10 +16,9 @@ export class NavigatorProperties {
   version = "";
 
   sheets: IconNav[] = [
-    { link: '', icon: "usage", tip: "Usage" },
-    { link: '', icon: "users", tip: "Users" },
-    { link: '', icon: "userscog", tip: "Users Flattened" },
-    { link: '', icon: "excel", tip: "Excel View" },
+    { link: '', icon: "topic", tip: "Aggregate topic metrics" },
+    { link: '', icon: "users", tip: "Topics By user" },
+    { link: '', icon: "lab", tip: "Labs by user" },
   ];
   constructor(private courseRepo: CourseRepo) {}
 
@@ -30,7 +29,6 @@ export class NavigatorProperties {
 
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[2].link = `usersflat/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[3].link = `excel/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[2].link = `excel/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
   }
 }

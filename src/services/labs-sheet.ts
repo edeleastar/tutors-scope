@@ -1,14 +1,11 @@
-import "ag-grid-enterprise";
-import { GridOptions } from "ag-grid-community";
-import { BaseView } from "./base-view";
-import { UserMetric } from "../../services/metrics-service";
-import { Lo } from "../../services/lo";
+import {Lo} from "./lo";
+import {UserMetric} from "./metrics-service";
 
-class Sheet {
-  columnDefs = [
-    { headerName: "User", field: "user", width: 50 },
-    { headerName: "Summary", field: "summary", width: 10 },
-    { headerName: "Date Last Accessed", field: "date" }
+export class LabsSheet {
+  columnDefs: any = [
+    { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
+    { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true },
+    { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
 
   formatName(userName: string, email: string) {
@@ -35,11 +32,30 @@ class Sheet {
       for (let step of lab.los) {
         this.columnDefs.push({
           headerName: step.shortTitle,
-          width: 5,
-          field: lab.title + step.shortTitle
+          width: 60,
+          field: lab.title + step.shortTitle,
+          suppressSizeToFit: true,
+          cellClassRules: {
+            "green-11": "x > 10",
+            "green-10": "x == 10",
+            "green-9": "x == 9",
+            "green-8": "x == 8",
+            "green-7": "x == 7",
+            "green-6": "x == 6",
+            "green-5": "x == 5",
+            "green-4": "x == 4",
+            "green-3": "x == 3",
+            "green-2": "x == 2",
+            "green-1": "x == 1",
+            "red": "x == 0"
+          }
         });
       }
     }
+  }
+
+  sort () {
+    this.rowData.sort((a, b) => b.summary - a.summary);
   }
 
   populateRow(user: UserMetric, los: Lo[]) {
@@ -74,42 +90,6 @@ class Sheet {
     if (grid) {
       grid.api.setColumnDefs(this.columnDefs);
       grid.api.setRowData(this.rowData);
-    }
-  }
-}
-
-export class ExportView extends BaseView {
-  gridOptions: GridOptions = {
-    animateRows: true,
-    groupHideOpenParents: true,
-    groupDefaultExpanded: 0,
-    defaultColDef: {
-      width: 120,
-      sortable: true,
-      resizable: true
-    }
-  };
-  sort = [{ colId: "name", sort: "asc" }];
-  sheet = new Sheet();
-
-  async activate(params, route) {
-    await super.activate(params, route);
-    this.sheet.populateCols(this.metricsService.allLabs);
-    for (let user of this.metricsService.users) {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-      if (this.grid) {
-        this.grid.api.setSortModel(this.sort);
-        this.grid.api.autoSizeAllColumns();
-      }
-    }
-    this.update();
-  }
-
-  update() {
-    this.sheet.render(this.grid);
-    if (this.grid) {
-      this.grid.api.setSortModel(this.sort);
-      this.grid.api.autoSizeAllColumns();
     }
   }
 }
