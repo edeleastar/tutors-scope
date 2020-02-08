@@ -1,12 +1,28 @@
 import {Lo} from "./lo";
 import {UserMetric} from "./metrics-service";
+import {ICellRendererParams} from "ag-grid-community";
 
 export class LabsSheet {
   columnDefs: any = [
-    { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
-    { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true },
+    { headerName: "User", field: "user", width: 180, suppressSizeToFit: true,   pinned: 'left' },
+    { headerName: "Github", field: "github", width: 80, suppressSizeToFit: true, cellRenderer: this.renderGithub   },
+    { headerName: "Total Visits", field: "summary", width: 60, suppressSizeToFit: true },
     { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
+
+  renderGithub (params: ICellRendererParams) {
+    if (params.value) {
+      var nameElement = document.createElement("span");
+      var a = document.createElement('a');
+      var linkText = document.createTextNode(params.value);
+      a.appendChild(linkText);
+      a.title = params.value;
+      a.href = "http://github.com/" + a.title;
+      a.setAttribute('target', '_blank');
+      nameElement.appendChild(a);
+    return nameElement;
+    }
+  }
 
   formatName(userName: string, email: string) {
     let name = userName;
@@ -62,7 +78,8 @@ export class LabsSheet {
     let row = {
       user: this.formatName(user.name, user.email),
       summary: 0,
-      date: user.last
+      date: user.last,
+      github : user.nickname
     };
 
     for (let lab of los) {

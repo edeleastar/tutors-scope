@@ -34,7 +34,7 @@ export class BaseView {
     this.show = app.authenticated;
   }
 
-  async activate(params, route) {
+  async activate(params, title:string) {
     this.myKeypressCallback = this.keypressInput.bind(this);
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (params.courseurl !== this.courseUrl) {
@@ -42,7 +42,7 @@ export class BaseView {
       await this.courseRepo.fetchCourse(params.courseurl);
       this.courseRepo.course.populate();
       this.course = this.courseRepo.course;
-      this.navigatorProperties.init(this.course.lo);
+      this.navigatorProperties.init(this.course.lo, title);
       await this.metricsService.retrieveMetrics(this.course);
       this.metricsService.populateUserStats(this.courseRepo.course);
     }

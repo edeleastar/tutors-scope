@@ -1,5 +1,4 @@
 import { Sheet } from "./sheet";
-import { UserMetric } from "./metrics-service";
 import { ICellRendererParams } from "ag-grid-community";
 import {genImageNode, genNameNode} from "./utils";
 

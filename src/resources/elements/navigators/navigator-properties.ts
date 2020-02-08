@@ -12,6 +12,7 @@ interface Properties {
 @autoinject
 export class NavigatorProperties {
   title: string;
+  subtitle : string;
   img: string;
   version = "";
 
@@ -22,9 +23,10 @@ export class NavigatorProperties {
   ];
   constructor(private courseRepo: CourseRepo) {}
 
-  init(lo: Lo) {
+  init(lo: Lo, title:string) {
     this.title = lo.title;
     this.img = lo.img;
+    this.subtitle = title;
     this.version = `${readerVersion} (${this.courseRepo.course.lo.version})`;
 
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;

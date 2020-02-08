@@ -17,6 +17,7 @@ export interface UserMetric {
   email: string;
   picture: string;
   name: string;
+  nickname : string,
   title: string;
   count: number;
   last: string;
