@@ -8,6 +8,7 @@ export class UsersView extends BaseView {
     animateRows: true,
     groupHideOpenParents: true,
     groupDefaultExpanded: 0,
+    headerHeight: 100,
     getRowHeight: function(params) {
       if (params.data) {
         if (params.data.l0) {
@@ -34,8 +35,8 @@ export class UsersView extends BaseView {
 
   sheet = new UsersSheet();
 
-  async activate(params, route) {
-    await super.activate(params, route);
+  async activate(params) {
+    await super.activate(params, "Usage by User");
     for (let user of this.metricsService.users) {
       this.sheet.populate(user, user);
     }

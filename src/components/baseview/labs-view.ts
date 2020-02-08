@@ -15,8 +15,8 @@ export class LabsView extends BaseView {
   };
   sheet = new LabsSheet();
 
-  async activate(params, route) {
-    await super.activate(params, route);
+  async activate(params) {
+    await super.activate(params, "Lab Interaction Patterns");
     this.sheet.populateCols(this.metricsService.allLabs);
     for (let user of this.metricsService.users) {
       this.sheet.populateRow(user, this.metricsService.allLabs);

@@ -8,6 +8,7 @@ export class UsageView extends BaseView {
     animateRows: true,
     groupHideOpenParents: true,
     groupDefaultExpanded: 0,
+    headerHeight: 100,
     defaultColDef: {
       width: 100,
       sortable: true,
@@ -17,8 +18,8 @@ export class UsageView extends BaseView {
 
   sheet = new UsageSheet();
 
-  async activate(params, route) {
-    await super.activate(params, route);
+  async activate(params) {
+    await super.activate(params, "Aggregate Usage Metrics");
     for (let topic of this.metricsService.usage.metrics) {
       this.sheet.populate(topic, { name: topic.title });
     }
