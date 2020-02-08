@@ -1,10 +1,7 @@
-import "ag-grid-enterprise";
-import { GridOptions, ICellRendererParams } from "ag-grid-community";
-import { BaseView } from "./base-view";
-import { UserMetric } from "../../services/metrics-service";
-import { Lo } from "../../services/lo";
+import {Lo} from "./lo";
+import {UserMetric} from "./metrics-service";
 
-class Sheet {
+export class LabsSheet {
   columnDefs: any = [
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
     { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true },
@@ -94,33 +91,5 @@ class Sheet {
       grid.api.setColumnDefs(this.columnDefs);
       grid.api.setRowData(this.rowData);
     }
-  }
-}
-
-export class ExportView extends BaseView {
-  gridOptions: GridOptions = {
-    animateRows: true,
-    headerHeight: 180,
-    defaultColDef: {
-      width: 120,
-      sortable: true,
-      resizable: true
-    }
-  };
-  sort = [{ colId: "name", sort: "asc" }];
-  sheet = new Sheet();
-
-  async activate(params, route) {
-    await super.activate(params, route);
-    this.sheet.populateCols(this.metricsService.allLabs);
-    for (let user of this.metricsService.users) {
-      this.sheet.populateRow(user, this.metricsService.allLabs);
-    }
-    this.sheet.sort();
-    this.update();
-  }
-
-  update() {
-    this.sheet.render(this.grid);
   }
 }
