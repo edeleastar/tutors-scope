@@ -50,18 +50,36 @@
   background-color: red;
 }
 .green-1 {
-  background-color: springgreen;
+  background-color: #00D000;
 }
 .green-2 {
-  background-color:limegreen;
+  background-color:#00C000
 }
 .green-3 {
-  background-color: mediumseagreen;
+  background-color: #00B000;
 }
 .green-4 {
-  background-color: green;
+  background-color: #00A000;
 }
 .green-5 {
-  background-color: darkgreen;
+  background-color: #009000;
+}
+.green-6 {
+  background-color: #008000;
+}
+.green-7 {
+  background-color: #007000;
+}
+.green-8 {
+  background-color: #006000;
+}
+.green-9 {
+  background-color: #005800;
+}
+.green-10 {
+  background-color: #005000;
+}
+.green-11 {
+  background-color: #004800;
 }
 

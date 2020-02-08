@@ -1,15 +1,14 @@
 import "ag-grid-enterprise";
-import {GridOptions, ICellRendererParams} from "ag-grid-community";
+import { GridOptions, ICellRendererParams } from "ag-grid-community";
 import { BaseView } from "./base-view";
 import { UserMetric } from "../../services/metrics-service";
 import { Lo } from "../../services/lo";
-import {genImageNode, genNameNode} from "../../services/utils";
 
 class Sheet {
-  columnDefs:any = [
+  columnDefs: any = [
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true },
     { headerName: "Summary", field: "summary", width: 60, suppressSizeToFit: true },
-    { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true  }
+    { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
 
   formatName(userName: string, email: string) {
@@ -40,23 +39,26 @@ class Sheet {
           field: lab.title + step.shortTitle,
           suppressSizeToFit: true,
           cellClassRules: {
-            'green-5': 'x >= 5',
-            'green-4': 'x >= 4 && x < 5',
-            'green-3': 'x >= 3 && x < 4',
-            'green-2': 'x >= 2 && x < 3',
-            'green-1': 'x >= 1 && x < 2',
-            'red': 'x >= 0 && x < 1'
+            "green-11": "x > 10",
+            "green-10": "x == 10",
+            "green-9": "x == 9",
+            "green-8": "x == 8",
+            "green-7": "x == 7",
+            "green-6": "x == 6",
+            "green-5": "x == 5",
+            "green-4": "x == 4",
+            "green-3": "x == 3",
+            "green-2": "x == 2",
+            "green-1": "x == 1",
+            "red": "x == 0"
           }
         });
       }
     }
   }
 
-  renderUserDetails(params: ICellRendererParams) {
-    var t = document.createElement("span");
-    t.innerText = params.value;
-    t.style.backgroundColor="green"
-    return t;
+  sort () {
+    this.rowData.sort((a, b) => b.summary - a.summary);
   }
 
   populateRow(user: UserMetric, los: Lo[]) {
@@ -98,10 +100,7 @@ class Sheet {
 export class ExportView extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
-    //groupHideOpenParents: true,
-    //groupDefaultExpanded: 0,
     headerHeight: 180,
-    // pivotGroupHeaderHeight:30,
     defaultColDef: {
       width: 120,
       sortable: true,
@@ -116,19 +115,12 @@ export class ExportView extends BaseView {
     this.sheet.populateCols(this.metricsService.allLabs);
     for (let user of this.metricsService.users) {
       this.sheet.populateRow(user, this.metricsService.allLabs);
-      if (this.grid) {
-        this.grid.api.setSortModel(this.sort);
-        this.grid.api.autoSizeAllColumns();
-      }
     }
+    this.sheet.sort();
     this.update();
   }
 
   update() {
     this.sheet.render(this.grid);
-    if (this.grid) {
-      //this.grid.api.setSortModel(this.sort);
-      // this.grid.api.autoSizeAllColumns();
-    }
   }
 }
