@@ -48,7 +48,7 @@ export class LabsSheet {
       for (let step of lab.los) {
         this.columnDefs.push({
           headerName: step.shortTitle,
-          width: 60,
+          width: 55,
           field: lab.title + step.shortTitle,
           suppressSizeToFit: true,
           cellClassRules: {

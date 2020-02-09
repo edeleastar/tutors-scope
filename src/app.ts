@@ -34,6 +34,12 @@ export class App {
         moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
         name: "labs",
         title: "Labs Interaction Patterns"
+      },
+      {
+        route: "labs/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
+        name: "labs",
+        title: "Labs Interaction Patterns"
       }
     ]);
   }
