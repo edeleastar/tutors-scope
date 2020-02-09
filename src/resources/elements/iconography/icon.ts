@@ -20,7 +20,8 @@ import {
   faTable,
   faLayerGroup,
   faFileExcel,
-  faUsersCog
+  faUsersCog,
+  faVial
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -37,6 +38,7 @@ export class Icon {
     talk: faObjectGroup,
     reference: faObjectGroup,
     lab: faFlask,
+    labsummary : faVial,
     archive: faFileArchive,
     panelvideo: faYoutube,
     video: faYoutube,
