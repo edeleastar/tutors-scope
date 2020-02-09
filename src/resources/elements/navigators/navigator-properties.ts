@@ -19,7 +19,8 @@ export class NavigatorProperties {
   sheets: IconNav[] = [
     { link: '', icon: "topic", tip: "Aggregate topic metrics" },
     { link: '', icon: "users", tip: "Topics By user" },
-    { link: '', icon: "lab", tip: "Labs by user" },
+    { link: '', icon: "lab", tip: "Labs Detail by user" },
+    { link: '', icon: "labsummary", tip: "Labs Summary by user" },
   ];
 
   options: IconNav[] = [
@@ -38,6 +39,7 @@ export class NavigatorProperties {
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[2].link = `labs/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[3].link = `labsummary/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
 
     this.options[0].link = `https://tutors-design.netlify.com/course/${this.courseRepo.courseUrl}`;
   }

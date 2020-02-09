@@ -33,19 +33,25 @@ export class App {
         route: "excel/*courseurl",
         moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
         name: "labs",
-        title: "Labs Interaction Patterns"
+        title: "Detailed Labs Interaction Patterns"
       },
       {
         route: "labs/*courseurl",
         moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
         name: "labs",
-        title: "Labs Interaction Patterns"
+        title: "Detailed Labs Interaction Patterns"
       },
       {
         route: "course/*courseurl",
         moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
         name: "labs",
-        title: "Labs Interaction Patterns"
+        title: "Detailed Labs Interaction Patterns"
+      },
+      {
+        route: "labsummary/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/labsummary/labs-summary"),
+        name: "labs",
+        title: "Summary Labs Interaction Patterns"
       }
     ]);
   }

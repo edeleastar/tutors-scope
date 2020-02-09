@@ -2,8 +2,9 @@ import "ag-grid-enterprise";
 import { GridOptions } from "ag-grid-community";
 import { BaseView } from "../baseview/base-view";
 import { LabsSheet } from "../sheets/labs-sheet";
+import {LabsSummarySheet} from "../sheets/lab-summary-sheet";
 
-export class LabsView extends BaseView {
+export class LabsSummary extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
     headerHeight: 180,
@@ -12,10 +13,10 @@ export class LabsView extends BaseView {
       resizable: true
     }
   };
-  sheet = new LabsSheet();
+  sheet = new LabsSummarySheet();
 
   async activate(params) {
-    await super.activate(params, "Detailed Lab Interaction Patterns");
+    await super.activate(params, "Summary Lab Interaction Patterns");
     this.sheet.populateCols(this.metricsService.allLabs);
     for (let user of this.metricsService.users) {
       this.sheet.populateRow(user, this.metricsService.allLabs);
