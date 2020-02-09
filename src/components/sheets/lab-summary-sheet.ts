@@ -4,6 +4,7 @@ import { ICellRendererParams } from "ag-grid-community";
 
 export class LabsSummarySheet {
   columnDefs: any = [
+    { headerName: "Rank", field: "index", pinned: "left", width: 40, suppressSizeToFit: true },
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
     { headerName: "Github", field: "github", width: 80, suppressSizeToFit: true, cellRenderer: this.renderGithub },
     { headerName: "Total Visits", field: "summary", width: 60, suppressSizeToFit: true },
@@ -62,7 +63,7 @@ export class LabsSummarySheet {
           "green-3": "x >= 3 && x < 4",
           "green-2": "x >= 2 && x < 3",
           "green-1": "x >= 1 && x < 2",
-          "yellow" : "x > 0 && x < 1",
+          yellow: "x > 0 && x < 1",
           red: "x == 0"
         }
       });
@@ -71,6 +72,11 @@ export class LabsSummarySheet {
 
   sort() {
     this.rowData.sort((a, b) => b.summary - a.summary);
+    let index = 1;
+    this.rowData.forEach(value => {
+      value.index = index;
+      index++;
+    });
   }
 
   populateRow(user: UserMetric, los: Lo[]) {
@@ -81,11 +87,11 @@ export class LabsSummarySheet {
       github: user.nickname
     };
 
-    const totalStepsPerLab= [];
+    const totalStepsPerLab = [];
 
     for (let lab of los) {
       row[`${lab.title}`] = 0;
-      totalStepsPerLab[`${lab.title}`] = lab.los.length -1;
+      totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
     }
 
     let summaryCount = 0;
@@ -97,7 +103,7 @@ export class LabsSummarySheet {
         }
         row[`${labMetric.title}`] = labSummaryCount / totalStepsPerLab[`${labMetric.title}`];
       }
-      summaryCount = summaryCount + labSummaryCount
+      summaryCount = summaryCount + labSummaryCount;
     }
     row.summary = summaryCount;
     this.rowData.push(row);
