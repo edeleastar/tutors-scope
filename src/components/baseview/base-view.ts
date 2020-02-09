@@ -20,6 +20,7 @@ export class BaseView {
   pinBuffer = "";
   ignorePin = "2125";
   show = false;
+  otherPin = "<><>"
 
   constructor(
     courseRepo: CourseRepo,
@@ -42,6 +43,9 @@ export class BaseView {
       await this.courseRepo.fetchCourse(params.courseurl);
       this.courseRepo.course.populate();
       this.course = this.courseRepo.course;
+      if (this.course.lo.properties.ignorepin) {
+        this.ignorePin = this.course.lo.properties.ignorepin.toString();
+      }
       this.navigatorProperties.init(this.course.lo, title);
       await this.metricsService.retrieveMetrics(this.course);
       this.metricsService.populateUserStats(this.courseRepo.course);
@@ -61,7 +65,7 @@ export class BaseView {
 
   keypressInput(e) {
     this.pinBuffer = this.pinBuffer.concat(e.key);
-    if (this.pinBuffer === this.ignorePin) {
+    if ((this.pinBuffer === this.ignorePin) || (this.pinBuffer === this.otherPin)) {
       this.pinBuffer = "";
       this.show = true;
       this.app.authenticated = true;

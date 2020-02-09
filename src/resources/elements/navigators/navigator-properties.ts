@@ -21,6 +21,12 @@ export class NavigatorProperties {
     { link: '', icon: "users", tip: "Topics By user" },
     { link: '', icon: "lab", tip: "Labs by user" },
   ];
+
+  options: IconNav[] = [
+    { link: '', icon: "moduleHome", tip: "Course Home" },
+  ];
+
+
   constructor(private courseRepo: CourseRepo) {}
 
   init(lo: Lo, title:string) {
@@ -31,6 +37,8 @@ export class NavigatorProperties {
 
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[2].link = `excel/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[2].link = `labs/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+
+    this.options[0].link = `https://tutors-design.netlify.com/course/${this.courseRepo.courseUrl}`;
   }
 }
