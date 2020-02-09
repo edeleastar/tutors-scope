@@ -85,7 +85,7 @@ export class LabsSummarySheet {
 
     for (let lab of los) {
       row[`${lab.title}`] = 0;
-      totalStepsPerLab[`${lab.title}`] = lab.los.length;
+      totalStepsPerLab[`${lab.title}`] = lab.los.length -1;
     }
 
     let summaryCount = 0;
