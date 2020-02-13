@@ -22,6 +22,7 @@ export class NavigatorProperties {
     { link: '', icon: "lab", tip: "Labs Detail by user" },
     { link: '', icon: "labsummary", tip: "Labs Summary by user" },
     { link: '', icon: "hourglass", tip: "Labs Detail by duration" },
+    { link: '', icon: "hourglassend", tip: "Labs Summary by duration" },
   ];
 
   options: IconNav[] = [
@@ -42,6 +43,7 @@ export class NavigatorProperties {
     this.sheets[2].link = `labs/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[3].link = `labsummary/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[4].link = `labdetailsduration/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[5].link = `labsummaryduration/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
 
     this.options[0].link = `https://tutors-design.netlify.com/course/${this.courseRepo.courseUrl}`;
   }
