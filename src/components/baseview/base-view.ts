@@ -47,8 +47,7 @@ export class BaseView {
         this.ignorePin = this.course.lo.properties.ignorepin.toString();
       }
       this.navigatorProperties.init(this.course.lo, title);
-      await this.metricsService.retrieveMetrics(this.course);
-      this.metricsService.populateUserStats(this.courseRepo.course);
+      await this.metricsService.updateMetrics(this.courseRepo.course);
     }
   }
 
