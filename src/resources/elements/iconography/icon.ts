@@ -22,7 +22,8 @@ import {
   faFileExcel,
   faUsersCog,
   faVial,
-  faHourglassHalf
+  faHourglass,
+  faHourglassEnd
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -62,7 +63,8 @@ export class Icon {
     usage: faLayerGroup,
     excel : faFileExcel,
     userscog : faUsersCog,
-    hourglass : faHourglassHalf
+    hourglass : faHourglass,
+    hourglassend : faHourglassEnd
   };
 
   icon(type: string) {
