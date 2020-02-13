@@ -1,7 +1,7 @@
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
 import { LabsSheet } from "./lab-sheet";
-import {labUsageCount} from "./heat-map-colours";
+import {labDurationCount, labUsageCount} from "./heat-map-colours";
 
 export class LabsSummaryDurationSheet extends LabsSheet {
   populateCols(los: Lo[]) {
@@ -11,7 +11,7 @@ export class LabsSummaryDurationSheet extends LabsSheet {
         width: 70,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: labUsageCount
+        cellClassRules: labDurationCount
       });
     }
   }
@@ -37,14 +37,14 @@ export class LabsSummaryDurationSheet extends LabsSheet {
       if (labMetric) {
         for (let stepMetric of labMetric.metrics) {
           if (stepMetric.duration) {
-            labSummaryCount = labSummaryCount + stepMetric.duration;
+            labSummaryCount = labSummaryCount + stepMetric.duration/2;
           }
         }
         row[`${labMetric.title}`] = labSummaryCount / totalStepsPerLab[`${labMetric.title}`];
       }
       summaryCount = summaryCount + labSummaryCount;
     }
-    row.summary = summaryCount;
+    row.summary = summaryCount/2;
     this.rowData.push(row);
   }
 }
