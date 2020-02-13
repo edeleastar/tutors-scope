@@ -52,7 +52,13 @@ export class App {
         moduleId: PLATFORM.moduleName("./components/labsummary/labs-summary"),
         name: "labs",
         title: "Summary Labs Interaction Patterns"
-      }
+      },
+      {
+        route: "labdetailsduration/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/labsdurationview/labs-duration-view"),
+        name: "labs",
+        title: "Detailed Labs Interaction Patterns - by duration"
+      },
     ]);
   }
 }

@@ -21,7 +21,8 @@ import {
   faLayerGroup,
   faFileExcel,
   faUsersCog,
-  faVial
+  faVial,
+  faHourglassHalf
 } from "@fortawesome/free-solid-svg-icons";
 
 import { faYoutube, faSlack, faGithub, faYoutubeSquare } from "@fortawesome/free-brands-svg-icons";
@@ -60,7 +61,8 @@ export class Icon {
     users : faAddressCard,
     usage: faLayerGroup,
     excel : faFileExcel,
-    userscog : faUsersCog
+    userscog : faUsersCog,
+    hourglass : faHourglassHalf
   };
 
   icon(type: string) {

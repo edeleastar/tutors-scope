@@ -3,12 +3,14 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import environment from "../environment";
 import { Lo } from "./lo";
+import {CourseRepo} from "./course-repo";
 
 export interface Metric {
   id: string;
   title: string;
   count: number;
   last: string;
+  duration : number;
   metrics: Metric[];
 }
 
@@ -21,6 +23,7 @@ export interface UserMetric {
   title: string;
   count: number;
   last: string;
+  duration : number;
   metrics: Metric[];
   labActivity: Metric[];
 }
@@ -109,11 +112,17 @@ export class MetricsService {
           title: user.title,
           count: user.count,
           last: user.last,
+          duration : user.duration,
           metrics: user.metrics,
           labActivity: []
         };
         this.users.push(userMetric);
       }
     }
+  }
+
+  async updateMetrics (course : Course) {
+    await this.retrieveMetrics(course);
+    this.populateUserStats(course);
   }
 }
