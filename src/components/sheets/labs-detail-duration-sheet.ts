@@ -1,7 +1,7 @@
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
 import { LabsSheet } from "./lab-sheet";
-import {labDurationCount, labUsageCount} from "./heat-map-colours";
+import { labDurationCount, labUsageCount } from "./heat-map-colours";
 
 export class LabsDetailDurationSheet extends LabsSheet {
   populateCols(los: Lo[]) {
@@ -20,6 +20,7 @@ export class LabsDetailDurationSheet extends LabsSheet {
 
   populateRows(user: UserMetric, los: Lo[]) {
     let row = {
+      id: user.nickname,
       user: this.formatName(user.name, user.email),
       summary: 0,
       date: user.last,
@@ -37,13 +38,28 @@ export class LabsDetailDurationSheet extends LabsSheet {
       if (labMetric) {
         for (let stepMetric of labMetric.metrics) {
           if (stepMetric.duration) {
-            row[`${labMetric.title + stepMetric.title}`] = stepMetric.duration/2;
+            row[`${labMetric.title + stepMetric.title}`] = stepMetric.duration / 2;
             summaryCount = summaryCount + stepMetric.duration;
           }
         }
       }
     }
-    row.summary = summaryCount/2;
+    row.summary = summaryCount / 2;
     this.rowData.push(row);
+  }
+
+  updateRows(user: UserMetric, los: Lo[], grid) {
+    let summaryCount = 0;
+    for (let labMetric of user.labActivity) {
+      if (labMetric) {
+        for (let stepMetric of labMetric.metrics) {
+          if (stepMetric.duration) {
+            let rowNode = grid.api.getRowNode(user.nickname);
+            rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.duration / 2);
+          }
+          summaryCount = summaryCount + stepMetric.duration;
+        }
+      }
+    }
   }
 }

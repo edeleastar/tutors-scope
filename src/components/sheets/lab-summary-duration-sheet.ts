@@ -18,6 +18,7 @@ export class LabsSummaryDurationSheet extends LabsSheet {
 
   populateRows(user: UserMetric, los: Lo[]) {
     let row = {
+      id: user.nickname,
       user: this.formatName(user.name, user.email),
       summary: 0,
       date: user.last,
@@ -46,5 +47,27 @@ export class LabsSummaryDurationSheet extends LabsSheet {
     }
     row.summary = summaryCount/2;
     this.rowData.push(row);
+  }
+
+  updateRows(user: UserMetric, los: Lo[], grid) {
+
+    const totalStepsPerLab = [];
+    for (let lab of los) {
+      totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
+    }
+
+    let summaryCount = 0;
+    for (let labMetric of user.labActivity) {
+      let labSummaryCount = 0;
+      if (labMetric) {
+        for (let stepMetric of labMetric.metrics) {
+          if (stepMetric.duration) {
+            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
+          }
+        }
+        let rowNode = grid.api.getRowNode(user.nickname);
+        rowNode.setDataValue(`${labMetric.title}`, labSummaryCount / totalStepsPerLab[`${labMetric.title}`]);
+      }
+    }
   }
 }

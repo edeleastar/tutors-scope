@@ -79,7 +79,7 @@ export class MetricsService {
   }
 
   populateUserStats(course: Course) {
-    if (this.allLabs.length == 0) {
+    //if (this.allLabs.length == 0) {
       this.allLabs = course.walls.get("lab");
       for (let user of this.users) {
         for (let lab of this.allLabs) {
@@ -87,11 +87,11 @@ export class MetricsService {
           user.labActivity.push(labActivity);
         }
       }
-    }
+    //}
   }
 
   async retrieveMetrics(course: Course) {
-    if (!this.course || this.course != course) {
+   // if (!this.course || this.course != course) {
       this.course = course;
       const courseBaseName = course.url.substr(0, course.url.indexOf("."));
       const snapshot = await firebase
@@ -100,7 +100,7 @@ export class MetricsService {
         .once("value");
       const genericMetrics = this.expandGenericMetrics("root", snapshot.val());
       this.usage = genericMetrics.metrics[0];
-
+      this.users.length = 0;
       for (let user of genericMetrics.metrics[1].metrics) {
         const userMetric = {
           userId: user.id,
@@ -118,7 +118,7 @@ export class MetricsService {
         };
         this.users.push(userMetric);
       }
-    }
+    //}
   }
 
   async updateMetrics (course : Course) {

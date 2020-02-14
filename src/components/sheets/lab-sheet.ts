@@ -63,4 +63,5 @@ export class LabsSheet {
 
   populateCols(los: Lo[]) {}
   populateRows(user: UserMetric, los: Lo[]) {}
+  updateRows(user: UserMetric, los: Lo[], grid = null) {}
 }

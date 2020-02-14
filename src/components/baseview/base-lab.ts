@@ -3,6 +3,18 @@ import {GridOptions} from "ag-grid-community";
 import {LabsDetailSheet} from "../sheets/labs-detail-sheet";
 import {LabsSheet} from "../sheets/lab-sheet";
 
+let baseView: BaseLabsView = null;
+
+async function refresh() {
+  if (baseView) {
+    await baseView.metricsService.updateMetrics(baseView.course);
+    for (let user of baseView.metricsService.users) {
+      baseView.sheet.updateRows(user, baseView.metricsService.allLabs, baseView.grid);
+    }
+  }
+};
+setInterval(refresh, 30 * 1000);
+
 export class BaseLabsView extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
@@ -10,7 +22,9 @@ export class BaseLabsView extends BaseView {
     defaultColDef: {
       sortable: true,
       resizable: true
-    }
+    },
+    enableCellChangeFlash: true,
+    getRowNodeId: function(data) { return data.id; },
   };
   sheet: LabsSheet = null;
 
@@ -22,6 +36,7 @@ export class BaseLabsView extends BaseView {
     }
     this.sheet.sort();
     this.update();
+    baseView = this;
   }
 
   update() {
