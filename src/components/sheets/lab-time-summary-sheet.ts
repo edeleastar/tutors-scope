@@ -1,9 +1,9 @@
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
-import { LabsSheet } from "./lab-sheet";
-import {labDurationCount, labUsageCount} from "./heat-map-colours";
+import { LabSheet } from "./lab-sheet";
+import { labDurationCount, labUsageCount } from "./heat-map-colours";
 
-export class LabsSummaryDurationSheet extends LabsSheet {
+export class LabsTimeSummarySheet extends LabSheet {
   populateCols(los: Lo[]) {
     for (let lab of los) {
       this.columnDefs.push({
@@ -17,14 +17,7 @@ export class LabsSummaryDurationSheet extends LabsSheet {
   }
 
   populateRows(user: UserMetric, los: Lo[]) {
-    let row = {
-      id: user.nickname,
-      user: this.formatName(user.name, user.email),
-      summary: 0,
-      date: user.last,
-      github: user.nickname
-    };
-
+    let row = this.creatRow(user);
     const totalStepsPerLab = [];
 
     for (let lab of los) {
@@ -38,19 +31,18 @@ export class LabsSummaryDurationSheet extends LabsSheet {
       if (labMetric) {
         for (let stepMetric of labMetric.metrics) {
           if (stepMetric.duration) {
-            labSummaryCount = labSummaryCount + stepMetric.duration/2;
+            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
           }
         }
         row[`${labMetric.title}`] = labSummaryCount / totalStepsPerLab[`${labMetric.title}`];
       }
       summaryCount = summaryCount + labSummaryCount;
     }
-    row.summary = summaryCount/2;
+    row.summary = summaryCount / 2;
     this.rowData.push(row);
   }
 
   updateRows(user: UserMetric, los: Lo[], grid) {
-
     const totalStepsPerLab = [];
     for (let lab of los) {
       totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;

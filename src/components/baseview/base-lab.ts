@@ -1,9 +1,8 @@
-import {BaseView} from "./base-view";
-import {GridOptions} from "ag-grid-community";
-import {LabsDetailSheet} from "../sheets/labs-detail-sheet";
-import {LabsSheet} from "../sheets/lab-sheet";
+import { BaseView } from "./base-view";
+import { GridOptions } from "ag-grid-community";
+import { LabSheet } from "../sheets/lab-sheet";
 
-let baseView: BaseLabsView = null;
+let baseView: BaseLabView = null;
 
 async function refresh() {
   if (baseView) {
@@ -12,10 +11,10 @@ async function refresh() {
       baseView.sheet.updateRows(user, baseView.metricsService.allLabs, baseView.grid);
     }
   }
-};
+}
 setInterval(refresh, 30 * 1000);
 
-export class BaseLabsView extends BaseView {
+export class BaseLabView extends BaseView {
   gridOptions: GridOptions = {
     animateRows: true,
     headerHeight: 180,
@@ -24,9 +23,11 @@ export class BaseLabsView extends BaseView {
       resizable: true
     },
     enableCellChangeFlash: true,
-    getRowNodeId: function(data) { return data.id; },
+    getRowNodeId: function(data) {
+      return data.github;
+    }
   };
-  sheet: LabsSheet = null;
+  sheet: LabSheet = null;
 
   async activate(params) {
     await super.activate(params, "Detailed Lab Interaction Patterns");

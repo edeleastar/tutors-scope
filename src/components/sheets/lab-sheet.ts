@@ -2,7 +2,7 @@ import { ICellRendererParams } from "ag-grid-community";
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
 
-export class LabsSheet {
+export class LabSheet {
   columnDefs: any = [
     { headerName: "Rank", field: "index", pinned: "left", width: 40, suppressSizeToFit: true },
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
@@ -43,6 +43,16 @@ export class LabsSheet {
       name = lastName + ", " + firstName;
     }
     return name;
+  }
+
+  creatRow(user: UserMetric) {
+    let row = {
+      user: this.formatName(user.name, user.email),
+      summary: 0,
+      date: user.last,
+      github: user.nickname
+    };
+    return row;
   }
 
   sort() {

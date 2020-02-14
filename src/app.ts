@@ -30,40 +30,28 @@ export class App {
         title: "Topics by User"
       },
       {
-        route: "excel/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
+        route: "labclick/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/lab-click-views/lab-click-view"),
         name: "labs",
-        title: "Detailed Labs Interaction Patterns"
+        title: "Detailed Labs Interaction Patterns (page clicks)"
       },
       {
-        route: "labs/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
+        route: "labclicksummary/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/lab-click-views/lab-click-summary"),
         name: "labs",
-        title: "Detailed Labs Interaction Patterns"
+        title: "Summary Labs Interaction Patterns (page clicks averaged by lab)"
       },
       {
-        route: "course/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labsview/labs-view"),
+        route: "labtime/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/lab-time-views/lab-time-view"),
         name: "labs",
-        title: "Detailed Labs Interaction Patterns"
+        title: "LabsInteraction Patterns - by time (detailed)"
       },
       {
-        route: "labsummary/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labsummary/labs-summary"),
+        route: "labtimesummary/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/lab-time-views/lab-time-summary-view"),
         name: "labs",
-        title: "Summary Labs Interaction Patterns"
-      },
-      {
-        route: "labdetailsduration/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labsdurationview/labs-duration-view"),
-        name: "labs",
-        title: "Detailed Labs Interaction Patterns - by duration"
-      },
-      {
-        route: "labsummaryduration/*courseurl",
-        moduleId: PLATFORM.moduleName("./components/labssummarydurationview/labs-summary-duration-view"),
-        name: "labs",
-        title: "Summary Labs Interaction Patterns - by duration"
+        title: "Lab Interaction Patterns - by time (summarised)"
       },
     ]);
   }

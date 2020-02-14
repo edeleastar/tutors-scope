@@ -40,10 +40,10 @@ export class NavigatorProperties {
 
     this.sheets[0].link = `usage/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
     this.sheets[1].link = `users/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[2].link = `labs/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[3].link = `labsummary/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[4].link = `labdetailsduration/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
-    this.sheets[5].link = `labsummaryduration/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[2].link = `labclick/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[3].link = `labclicksummary/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[4].link = `labtime/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
+    this.sheets[5].link = `labtimesummary/${environment.urlPrefix}${this.courseRepo.courseUrl}`;
 
     this.options[0].link = `https://tutors-design.netlify.com/course/${this.courseRepo.courseUrl}`;
   }

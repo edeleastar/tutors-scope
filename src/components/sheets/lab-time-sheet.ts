@@ -1,9 +1,9 @@
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
-import { LabsSheet } from "./lab-sheet";
+import { LabSheet } from "./lab-sheet";
 import { labDurationCount, labUsageCount } from "./heat-map-colours";
 
-export class LabsDetailDurationSheet extends LabsSheet {
+export class LabTimeSheet extends LabSheet {
   populateCols(los: Lo[]) {
     for (let lab of los) {
       for (let step of lab.los) {
@@ -19,13 +19,7 @@ export class LabsDetailDurationSheet extends LabsSheet {
   }
 
   populateRows(user: UserMetric, los: Lo[]) {
-    let row = {
-      id: user.nickname,
-      user: this.formatName(user.name, user.email),
-      summary: 0,
-      date: user.last,
-      github: user.nickname
-    };
+    let row = this.creatRow(user);
 
     for (let lab of los) {
       for (let step of lab.los) {
