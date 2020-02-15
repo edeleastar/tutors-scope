@@ -1,6 +1,7 @@
 import { ICellRendererParams } from "ag-grid-community";
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
+import {labUsageCount} from "./heat-map-colours";
 
 export class LabSheet {
   columnDefs: any = [
@@ -71,7 +72,32 @@ export class LabSheet {
     }
   }
 
-  populateCols(los: Lo[]) {}
+  populateColsComplete(los: Lo[]) {
+    los.forEach(lab => {
+      lab.los.forEach(step => {
+        this.columnDefs.push({
+          headerName: step.shortTitle,
+          width: 55,
+          field: lab.title + step.shortTitle,
+          suppressSizeToFit: true,
+          cellClassRules: labUsageCount
+        });
+      });
+    });
+  }
+
+  populateCols(los: Lo[]) {
+    los.forEach(lab => {
+      this.columnDefs.push({
+        headerName: lab.title,
+        width: 70,
+        field: lab.title,
+        suppressSizeToFit: true,
+        cellClassRules: labUsageCount
+      });
+    })
+  }
+
   populateRows(user: UserMetric, los: Lo[]) {}
   updateRows(user: UserMetric, los: Lo[], grid = null) {}
 }

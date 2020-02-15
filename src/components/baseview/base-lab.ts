@@ -12,7 +12,7 @@ async function refresh() {
     }
   }
 }
-setInterval(refresh, 30 * 1000);
+//setInterval(refresh, 30 * 1000);
 
 export class BaseLabView extends BaseView {
   gridOptions: GridOptions = {
@@ -29,14 +29,14 @@ export class BaseLabView extends BaseView {
   };
   sheet: LabSheet = null;
 
-  async activate(params) {
-    await super.activate(params, "Detailed Lab Interaction Patterns");
-    this.sheet.populateCols(this.metricsService.allLabs);
-    for (let user of this.metricsService.users) {
-      this.sheet.populateRows(user, this.metricsService.allLabs);
-    }
-    this.sheet.sort();
-    this.update();
+  async activate(params, subtitle: string) {
+    await super.activate(params, subtitle);
+    // this.sheet.populateCols(this.metricsService.allLabs);
+    // for (let user of this.metricsService.users) {
+    //   this.sheet.populateRows(user, this.metricsService.allLabs);
+    // }
+    // this.sheet.sort();
+    // this.update();
     baseView = this;
   }
 

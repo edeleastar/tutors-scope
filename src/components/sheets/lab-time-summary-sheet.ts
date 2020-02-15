@@ -1,21 +1,8 @@
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
-import { labDurationCount, labUsageCount } from "./heat-map-colours";
 
 export class LabsTimeSummarySheet extends LabSheet {
-  populateCols(los: Lo[]) {
-    for (let lab of los) {
-      this.columnDefs.push({
-        headerName: lab.title,
-        width: 70,
-        field: lab.title,
-        suppressSizeToFit: true,
-        cellClassRules: labDurationCount
-      });
-    }
-  }
-
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     const totalStepsPerLab = [];
