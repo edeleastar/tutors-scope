@@ -3,14 +3,14 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import environment from "../environment";
 import { Lo } from "./lo";
-import {CourseRepo} from "./course-repo";
+import { CourseRepo } from "./course-repo";
 
 export interface Metric {
   id: string;
   title: string;
   count: number;
   last: string;
-  duration : number;
+  duration: number;
   metrics: Metric[];
 }
 
@@ -19,11 +19,11 @@ export interface UserMetric {
   email: string;
   picture: string;
   name: string;
-  nickname : string,
+  nickname: string;
   title: string;
   count: number;
   last: string;
-  duration : number;
+  duration: number;
   metrics: Metric[];
   labActivity: Metric[];
 }
@@ -79,7 +79,7 @@ export class MetricsService {
   }
 
   populateUserStats(course: Course) {
-    //if (this.allLabs.length == 0) {
+    if (this.allLabs.length == 0) {
       this.allLabs = course.walls.get("lab");
       for (let user of this.users) {
         for (let lab of this.allLabs) {
@@ -87,11 +87,11 @@ export class MetricsService {
           user.labActivity.push(labActivity);
         }
       }
-    //}
+    }
   }
 
   async retrieveMetrics(course: Course) {
-   // if (!this.course || this.course != course) {
+    if (!this.course || this.course != course) {
       this.course = course;
       const courseBaseName = course.url.substr(0, course.url.indexOf("."));
       const snapshot = await firebase
@@ -112,17 +112,28 @@ export class MetricsService {
           title: user.title,
           count: user.count,
           last: user.last,
-          duration : user.duration,
+          duration: user.duration,
           metrics: user.metrics,
           labActivity: []
         };
         this.users.push(userMetric);
+        //this.subscribe(courseBaseName, userMetric);
       }
-    //}
+    }
   }
 
-  async updateMetrics (course : Course) {
+  async updateMetrics(course: Course) {
     await this.retrieveMetrics(course);
     this.populateUserStats(course);
+  }
+
+  subscribe(courseBase: string, user: UserMetric) {
+    const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+    firebase
+      .database()
+      .ref(`${courseBase}/users/${userEmailSanitised}`)
+      .on("value", function(snapshot) {
+        console.log(snapshot.val());
+      });
   }
 }

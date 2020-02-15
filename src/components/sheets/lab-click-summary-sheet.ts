@@ -5,10 +5,10 @@ import { LabSheet } from "./lab-sheet";
 export class LabClickSummarySheet extends LabSheet {
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
+    this.zeroEntries(los, row);
 
     const totalStepsPerLab = [];
     los.forEach(lab => {
-      row[`${lab.title}`] = 0;
       totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
     });
 

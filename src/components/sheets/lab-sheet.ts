@@ -8,7 +8,7 @@ export class LabSheet {
     { headerName: "Rank", field: "index", pinned: "left", width: 40, suppressSizeToFit: true },
     { headerName: "User", field: "user", width: 180, suppressSizeToFit: true, pinned: "left" },
     { headerName: "Github", field: "github", width: 80, suppressSizeToFit: true, cellRenderer: this.renderGithub },
-    { headerName: "Total Visits", field: "summary", width: 60, suppressSizeToFit: true },
+    { headerName: "Total", field: "summary", width: 60, suppressSizeToFit: true },
     { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
   rowData = [];
@@ -96,6 +96,20 @@ export class LabSheet {
         cellClassRules: labUsageCount
       });
     })
+  }
+
+  zeroEntries(los:Lo[], row) {
+    los.forEach(lab => {
+      row[`${lab.title}`] = 0;
+    });
+  }
+
+  zeroEntriesComplete(los:Lo[], row) {
+    los.forEach(lab => {
+      lab.los.forEach(step => {
+        row[`${lab.title + step.shortTitle}`] = 0;
+      });
+    });
   }
 
   populateRows(user: UserMetric, los: Lo[]) {}

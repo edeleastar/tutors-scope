@@ -3,14 +3,9 @@ import { UserMetric } from "../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
 
 export class LabClickSheet extends LabSheet {
-
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
-    los.forEach(lab => {
-      lab.los.forEach(step => {
-        row[`${lab.title + step.shortTitle}`] = 0;
-      });
-    });
+    this.zeroEntriesComplete(los, row);
 
     let summaryCount = 0;
     user.labActivity.forEach(labMetric => {
