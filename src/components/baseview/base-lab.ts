@@ -36,5 +36,4 @@ export class BaseLabView extends BaseView {
   update() {
     this.sheet.render(this.grid);
   }
-
 }

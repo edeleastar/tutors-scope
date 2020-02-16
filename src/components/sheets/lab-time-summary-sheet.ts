@@ -3,13 +3,14 @@ import { UserMetric } from "../../services/metrics-service";
 import { LabSheet } from "./lab-sheet";
 
 export class LabsTimeSummarySheet extends LabSheet {
+  totalStepsPerLab = [];
+
   populateRows(user: UserMetric, los: Lo[]) {
     let row = this.creatRow(user);
     this.zeroEntries(los, row);
 
-    const totalStepsPerLab = [];
     los.forEach(lab => {
-      totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
+      this.totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
     });
 
     let summaryCount = 0;
@@ -21,7 +22,7 @@ export class LabsTimeSummarySheet extends LabSheet {
             labSummaryCount = labSummaryCount + stepMetric.duration / 2;
           }
         });
-        row[`${labMetric.title}`] = labSummaryCount / totalStepsPerLab[`${labMetric.title}`];
+        row[`${labMetric.title}`] = labSummaryCount;
       }
       summaryCount = summaryCount + labSummaryCount;
     });
@@ -29,24 +30,20 @@ export class LabsTimeSummarySheet extends LabSheet {
     this.rowData.push(row);
   }
 
-  // updateRows(user: UserMetric, los: Lo[], grid) {
-  //   const totalStepsPerLab = [];
-  //   for (let lab of los) {
-  //     totalStepsPerLab[`${lab.title}`] = lab.los.length - 1;
-  //   }
-  //
-  //   let summaryCount = 0;
-  //   for (let labMetric of user.labActivity) {
-  //     let labSummaryCount = 0;
-  //     if (labMetric) {
-  //       for (let stepMetric of labMetric.metrics) {
-  //         if (stepMetric.duration) {
-  //           labSummaryCount = labSummaryCount + stepMetric.duration / 2;
-  //         }
-  //       }
-  //       let rowNode = grid.api.getRowNode(user.nickname);
-  //       rowNode.setDataValue(`${labMetric.title}`, labSummaryCount / totalStepsPerLab[`${labMetric.title}`]);
-  //     }
-  //   }
-  // }
+  updateRow(user: UserMetric, rowNode) {
+    let summaryCount = 0;
+    user.labActivity.forEach(labMetric => {
+      let labSummaryCount = 0;
+      if (labMetric) {
+        labMetric.metrics.forEach(stepMetric => {
+          if (stepMetric.duration) {
+            labSummaryCount = labSummaryCount + stepMetric.duration / 2;
+          }
+        });
+        rowNode.setDataValue(`${labMetric.title}`, labSummaryCount);
+      }
+      summaryCount = summaryCount + labSummaryCount;
+    });
+    rowNode.setDataValue('summary',  summaryCount / 2);
+  }
 }

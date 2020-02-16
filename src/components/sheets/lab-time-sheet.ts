@@ -22,18 +22,16 @@ export class LabTimeSheet extends LabSheet {
     this.rowData.push(row);
   }
 
-  // updateRows(user: UserMetric, los: Lo[], grid) {
-  //   let summaryCount = 0;
-  //   for (let labMetric of user.labActivity) {
-  //     if (labMetric) {
-  //       for (let stepMetric of labMetric.metrics) {
-  //         if (stepMetric.duration) {
-  //           let rowNode = grid.api.getRowNode(user.nickname);
-  //           rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.duration / 2);
-  //         }
-  //         summaryCount = summaryCount + stepMetric.duration;
-  //       }
-  //     }
-  //   }
-  // }
+  updateRow(user: UserMetric, rowNode) {
+    let summaryCount = 0;
+    for (let labMetric of user.labActivity) {
+      if (labMetric) {
+        for (let stepMetric of labMetric.metrics) {
+          if (stepMetric.duration) {
+            rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.duration / 2);
+          }
+        }
+      }
+    }
+  }
 }

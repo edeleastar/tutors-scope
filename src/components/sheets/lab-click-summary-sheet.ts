@@ -20,7 +20,7 @@ export class LabClickSummarySheet extends LabSheet {
         labMetric.metrics.forEach(stepMetric => {
           labSummaryCount = labSummaryCount + stepMetric.count;
         });
-        row[`${labMetric.title}`] = labSummaryCount / this.totalStepsPerLab[`${labMetric.title}`];
+        row[`${labMetric.title}`] = labSummaryCount ;
       }
       summaryCount = summaryCount + labSummaryCount;
     });
@@ -37,7 +37,7 @@ export class LabClickSummarySheet extends LabSheet {
         labMetric.metrics.forEach(stepMetric => {
           labSummaryCount = labSummaryCount + stepMetric.count;
         });
-        rowNode.setDataValue(`${labMetric.title}`,labSummaryCount / this.totalStepsPerLab[`${labMetric.title}`]);
+        rowNode.setDataValue(`${labMetric.title}`,labSummaryCount );
       }
       summaryCount = summaryCount + labSummaryCount;
     });

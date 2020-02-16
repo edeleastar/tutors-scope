@@ -1,7 +1,7 @@
 import { ICellRendererParams } from "ag-grid-community";
 import { Lo } from "../../services/lo";
 import { UserMetric } from "../../services/metrics-service";
-import {labUsageCount} from "./heat-map-colours";
+import {deepScheme, shallowScheme} from "./heat-map-colours";
 
 export class LabSheet {
   columnDefs: any = [
@@ -11,9 +11,7 @@ export class LabSheet {
     { headerName: "Total", field: "summary", width: 60, suppressSizeToFit: true },
     { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
-  sortModel = [
-    {colId: 'summary', sort: 'dsc'}
-  ];
+  sortModel = [{ colId: "summary", sort: "dsc" }];
   rowData = [];
 
   renderGithub(params: ICellRendererParams) {
@@ -59,12 +57,11 @@ export class LabSheet {
     return row;
   }
 
-
   render(grid) {
     if (grid) {
       grid.api.setColumnDefs(this.columnDefs);
       grid.api.setRowData(this.rowData);
-      grid.api.setSortModel(this.sortModel)
+      grid.api.setSortModel(this.sortModel);
     }
   }
 
@@ -76,7 +73,7 @@ export class LabSheet {
           width: 55,
           field: lab.title + step.shortTitle,
           suppressSizeToFit: true,
-          cellClassRules: labUsageCount
+          cellClassRules: shallowScheme
         });
       });
     });
@@ -89,18 +86,18 @@ export class LabSheet {
         width: 70,
         field: lab.title,
         suppressSizeToFit: true,
-        cellClassRules: labUsageCount
+        cellClassRules: deepScheme
       });
-    })
+    });
   }
 
-  zeroEntries(los:Lo[], row) {
+  zeroEntries(los: Lo[], row) {
     los.forEach(lab => {
       row[`${lab.title}`] = 0;
     });
   }
 
-  zeroEntriesComplete(los:Lo[], row) {
+  zeroEntriesComplete(los: Lo[], row) {
     los.forEach(lab => {
       lab.los.forEach(step => {
         row[`${lab.title + step.shortTitle}`] = 0;

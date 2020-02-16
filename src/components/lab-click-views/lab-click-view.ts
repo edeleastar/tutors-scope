@@ -1,7 +1,6 @@
 import "ag-grid-enterprise";
 import { LabClickSheet } from "../sheets/lab-click-sheet";
 import { BaseLabView } from "../baseview/base-lab";
-import {UserMetric} from "../../services/metrics-service";
 
 export class LabClickView extends BaseLabView {
   sheet = new LabClickSheet();
