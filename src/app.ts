@@ -8,7 +8,7 @@ import { NavigatorProperties } from "./resources/elements/navigators/navigator-p
 @autoinject
 export class App {
   title = "Tutors";
-  authenticated = true;
+  authenticated = false;
 
   constructor(private navigatorProperties: NavigatorProperties, private courseRepo: CourseRepo) {}
 
@@ -52,6 +52,12 @@ export class App {
         moduleId: PLATFORM.moduleName("./components/lab-time-views/lab-time-summary-view"),
         name: "labs",
         title: "Lab Interaction Patterns - by time (summarised)"
+      },
+      {
+        route: "course/*courseurl",
+        moduleId: PLATFORM.moduleName("./components/usersview/users-view"),
+        name: "users",
+        title: "Topics by User"
       },
     ]);
   }
