@@ -1,18 +1,7 @@
 import { BaseView } from "./base-view";
 import { GridOptions } from "ag-grid-community";
 import { LabSheet } from "../sheets/lab-sheet";
-
-let baseView: BaseLabView = null;
-
-async function refresh() {
-  if (baseView) {
-    await baseView.metricsService.updateMetrics(baseView.course);
-    for (let user of baseView.metricsService.users) {
-      baseView.sheet.updateRows(user, baseView.metricsService.allLabs, baseView.grid);
-    }
-  }
-}
-//setInterval(refresh, 30 * 1000);
+import {UserMetric, UsersUpdateEvent, UserUpdateEvent} from "../../services/metrics-service";
 
 export class BaseLabView extends BaseView {
   gridOptions: GridOptions = {
@@ -31,16 +20,21 @@ export class BaseLabView extends BaseView {
 
   async activate(params, subtitle: string) {
     await super.activate(params, subtitle);
-    // this.sheet.populateCols(this.metricsService.allLabs);
-    // for (let user of this.metricsService.users) {
-    //   this.sheet.populateRows(user, this.metricsService.allLabs);
-    // }
-    // this.sheet.sort();
-    // this.update();
-    baseView = this;
+    this.ea.subscribe(UserUpdateEvent, userEvent => {
+      let rowNode = this.grid.api.getRowNode(userEvent.user.nickname);
+      if (rowNode) {
+        this.sheet.updateRow(userEvent.user, rowNode);
+      }
+    });
+    this.ea.subscribe(UsersUpdateEvent, usersMap => {
+      this.populateRows();
+    });
   }
+
+  populateRows() {}
 
   update() {
     this.sheet.render(this.grid);
   }
+
 }

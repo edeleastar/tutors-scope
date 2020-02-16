@@ -19,4 +19,15 @@ export class LabClickSheet extends LabSheet {
     row.summary = summaryCount;
     this.rowData.push(row);
   }
+
+  updateRow(user: UserMetric, rowNode) {
+    let summaryCount = 0;
+    for (let labMetric of user.labActivity) {
+      if (labMetric) {
+        for (let stepMetric of labMetric.metrics) {
+          rowNode.setDataValue(`${labMetric.title + stepMetric.title}`, stepMetric.count);
+        }
+      }
+    }
+  }
 }

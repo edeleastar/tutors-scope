@@ -11,6 +11,9 @@ export class LabSheet {
     { headerName: "Total", field: "summary", width: 60, suppressSizeToFit: true },
     { headerName: "Date Last Accessed", field: "date", width: 90, suppressSizeToFit: true }
   ];
+  sortModel = [
+    {colId: 'summary', sort: 'dsc'}
+  ];
   rowData = [];
 
   renderGithub(params: ICellRendererParams) {
@@ -56,19 +59,12 @@ export class LabSheet {
     return row;
   }
 
-  sort() {
-    this.rowData.sort((a, b) => b.summary - a.summary);
-    let index = 1;
-    this.rowData.forEach(value => {
-      value.index = index;
-      index++;
-    });
-  }
 
   render(grid) {
     if (grid) {
       grid.api.setColumnDefs(this.columnDefs);
       grid.api.setRowData(this.rowData);
+      grid.api.setSortModel(this.sortModel)
     }
   }
 
@@ -113,5 +109,5 @@ export class LabSheet {
   }
 
   populateRows(user: UserMetric, los: Lo[]) {}
-  updateRows(user: UserMetric, los: Lo[], grid = null) {}
+  updateRow(user: UserMetric, rowNode) {}
 }

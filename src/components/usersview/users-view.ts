@@ -37,9 +37,9 @@ export class UsersView extends BaseView {
 
   async activate(params) {
     await super.activate(params, "Usage by User");
-    for (let user of this.metricsService.users) {
+    this.metricsService.usersMap.forEach((user, id) => {
       this.sheet.populate(user, user);
-    }
+    });
     this.update();
   }
 

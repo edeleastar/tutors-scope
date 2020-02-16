@@ -4,6 +4,23 @@ import "firebase/database";
 import environment from "../environment";
 import { Lo } from "./lo";
 import { CourseRepo } from "./course-repo";
+import { inject } from "aurelia-dependency-injection";
+import { EventAggregator } from "aurelia-event-aggregator";
+import DataSnapshot = firebase.database.DataSnapshot;
+
+export class UserUpdateEvent {
+  user: UserMetric;
+  constructor(user) {
+    this.user = user;
+  }
+}
+
+export class UsersUpdateEvent {
+  usersMap = new Map<string, UserMetric>();
+  constructor(usersMap) {
+    this.usersMap = usersMap;
+  }
+}
 
 export interface Metric {
   id: string;
@@ -28,13 +45,14 @@ export interface UserMetric {
   labActivity: Metric[];
 }
 
+@inject(EventAggregator)
 export class MetricsService {
   usage: Metric;
-  users: UserMetric[] = [];
+  usersMap = new Map<string, UserMetric>();
   course: Course;
   allLabs: Lo[] = [];
 
-  constructor() {
+  constructor(private ea: EventAggregator) {
     firebase.initializeApp(environment.firebase);
   }
 
@@ -78,62 +96,67 @@ export class MetricsService {
     return this.findInMetrics(title, metric.metrics);
   }
 
-  populateUserStats(course: Course) {
-    if (this.allLabs.length == 0) {
-      this.allLabs = course.walls.get("lab");
-      for (let user of this.users) {
-        for (let lab of this.allLabs) {
-          const labActivity = this.findInUser(lab.title, user);
-          user.labActivity.push(labActivity);
-        }
-      }
+  populateLabUsage(user: UserMetric) {
+    user.labActivity = [];
+    for (let lab of this.allLabs) {
+      const labActivity = this.findInUser(lab.title, user);
+      user.labActivity.push(labActivity);
     }
   }
 
   async retrieveMetrics(course: Course) {
+    const that = this;
     if (!this.course || this.course != course) {
       this.course = course;
       const courseBaseName = course.url.substr(0, course.url.indexOf("."));
-      const snapshot = await firebase
+      firebase
         .database()
         .ref(`${courseBaseName}`)
-        .once("value");
-      const genericMetrics = this.expandGenericMetrics("root", snapshot.val());
-      this.usage = genericMetrics.metrics[0];
-      this.users.length = 0;
-      for (let user of genericMetrics.metrics[1].metrics) {
-        const userMetric = {
-          userId: user.id,
-          email: user.email,
-          name: user.name,
-          picture: user.picture,
-          nickname: user.nickname,
-          id: "home",
-          title: user.title,
-          count: user.count,
-          last: user.last,
-          duration: user.duration,
-          metrics: user.metrics,
-          labActivity: []
-        };
-        this.users.push(userMetric);
-        //this.subscribe(courseBaseName, userMetric);
-      }
+        .once("value", function(snapshot: DataSnapshot) {
+          const genericMetrics = that.expandGenericMetrics("root", snapshot.val());
+          that.usage = genericMetrics.metrics[0];
+          for (let userMetric of genericMetrics.metrics[1].metrics) {
+            if (userMetric.nickname) {
+              const user = {
+                userId: userMetric.id,
+                email: userMetric.email,
+                name: userMetric.name,
+                picture: userMetric.picture,
+                nickname: userMetric.nickname,
+                id: "home",
+                title: userMetric.title,
+                count: userMetric.count,
+                last: userMetric.last,
+                duration: userMetric.duration,
+                metrics: userMetric.metrics,
+                labActivity: []
+              };
+              that.populateLabUsage(user);
+              that.usersMap.set(user.nickname, user);
+              that.subscribe(course, courseBaseName, user.email);
+            }
+          }
+          that.ea.publish(new UsersUpdateEvent(that.usersMap));
+        });
     }
   }
 
   async updateMetrics(course: Course) {
-    await this.retrieveMetrics(course);
-    this.populateUserStats(course);
+    this.allLabs = course.walls.get("lab");
+    this.retrieveMetrics(course);
   }
 
-  subscribe(courseBase: string, user: UserMetric) {
-    const userEmailSanitised = user.email.replace(/[`#$.\[\]\/]/gi, "*");
+  subscribe(course: Course, courseBase: string, email: string) {
+    const that = this;
+    const userEmailSanitised = email.replace(/[`#$.\[\]\/]/gi, "*");
     firebase
       .database()
       .ref(`${courseBase}/users/${userEmailSanitised}`)
       .on("value", function(snapshot) {
-        console.log(snapshot.val());
+        const user = that.expandGenericMetrics("root", snapshot.val());
+        that.populateLabUsage(user);
+        that.usersMap.set(user.nickname, user);
+        that.ea.publish(new UserUpdateEvent(user));
       });
   }
 }

@@ -8,7 +8,7 @@ import { NavigatorProperties } from "./resources/elements/navigators/navigator-p
 @autoinject
 export class App {
   title = "Tutors";
-  authenticated = false;
+  authenticated = true;
 
   constructor(private navigatorProperties: NavigatorProperties, private courseRepo: CourseRepo) {}
 
