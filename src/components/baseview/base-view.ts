@@ -5,12 +5,14 @@ import { Course } from "../../services/course";
 import { MetricsService } from "../../services/metrics-service";
 import { inject } from "aurelia-framework";
 import { App } from "../../app";
+import { EventAggregator } from "aurelia-event-aggregator";
 
-@inject(CourseRepo, NavigatorProperties, MetricsService, App)
+@inject(CourseRepo, NavigatorProperties, MetricsService, App, EventAggregator)
 export class BaseView {
   courseRepo: CourseRepo;
   navigatorProperties: NavigatorProperties;
   metricsService: MetricsService;
+  ea: EventAggregator;
   app: App;
 
   course: Course;
@@ -19,23 +21,25 @@ export class BaseView {
   myKeypressCallback: any;
   pinBuffer = "";
   ignorePin = "2125";
-  show = false;
-  otherPin = "<><>"
+  show = true;
+  otherPin = "<><>";
 
   constructor(
     courseRepo: CourseRepo,
     navigatorProperties: NavigatorProperties,
     metricsService: MetricsService,
-    app: App
+    app: App,
+    ea: EventAggregator
   ) {
     this.courseRepo = courseRepo;
     this.navigatorProperties = navigatorProperties;
     this.metricsService = metricsService;
+    this.ea = ea;
     this.app = app;
     this.show = app.authenticated;
   }
 
-  async activate(params, title:string) {
+  async activate(params, title: string) {
     this.myKeypressCallback = this.keypressInput.bind(this);
     window.addEventListener("keypress", this.myKeypressCallback, false);
     if (params.courseurl !== this.courseUrl) {
@@ -64,7 +68,7 @@ export class BaseView {
 
   keypressInput(e) {
     this.pinBuffer = this.pinBuffer.concat(e.key);
-    if ((this.pinBuffer === this.ignorePin) || (this.pinBuffer === this.otherPin)) {
+    if (this.pinBuffer === this.ignorePin || this.pinBuffer === this.otherPin) {
       this.pinBuffer = "";
       this.show = true;
       this.app.authenticated = true;
